@@ -1,17 +1,17 @@
 import React from 'react'
-import './Button_Label.css'
+import './LabelButton.css'
 
 interface ButtonProps {
     label: string;
     onClick: () => void;
-    type ?: 'button' | 'submit' | 'reset';
-    disabled ?: boolean;
+    type?: 'button' | 'submit' | 'reset';
+    disabled?: boolean;
 }
 
-const Button_Label: React.FC<ButtonProps> = ({ label, onClick, type = 'button', disabled = false }) => {
+function LabelButton({ label, onClick, type, disabled }: ButtonProps) {
     return (
         <button
-            className = "button"
+            className="button"
             onClick={onClick}
             type={type}
             disabled={disabled}
@@ -21,4 +21,4 @@ const Button_Label: React.FC<ButtonProps> = ({ label, onClick, type = 'button', 
     );
 };
 
-export default Button_Label;
+export default LabelButton;

@@ -1,4 +1,5 @@
 # LLM Frontend
+Contains the frontend user interface required to communicate with the LLM Backend (LLM-Go) with the use of React and Axios.
 
 
 ## Adding Functionality

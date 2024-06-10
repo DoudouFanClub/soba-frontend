@@ -1,15 +1,15 @@
-import React, {useState} from 'react';
-import './TextBox.css';
+import React, { useState } from "react";
+import "./TextBox.css";
 
 interface TextBoxProps {
   placeholder?: string;
-  value?: string;
   onChange?: (value: string) => void;
 }
 
-const TextBox: React.FC<TextBoxProps> = ({ placeholder = 'Speak to your local counsellor...', value = '', onChange }) => {
-  const [inputValue, setInputValue] = useState(value);
-  
+function TextBox({ placeholder, onChange }: TextBoxProps) {
+  const [inputValue, setInputValue] = useState("");
+
+  // On Change, Update Value in TextBoxProps
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value;
     setInputValue(newValue);
@@ -18,6 +18,7 @@ const TextBox: React.FC<TextBoxProps> = ({ placeholder = 'Speak to your local co
     }
   };
 
+  // Return a JSX
   return (
     <input
       type="text"
@@ -27,6 +28,6 @@ const TextBox: React.FC<TextBoxProps> = ({ placeholder = 'Speak to your local co
       onChange={handleChange}
     />
   );
-};
+}
 
 export default TextBox;
