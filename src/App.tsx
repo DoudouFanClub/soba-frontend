@@ -1,10 +1,15 @@
 // src/App.tsx
 import { useState } from "react";
+//import { Routes, Route, useNavigate } from "react-router-dom"; // note that we can use useNavigate to toggle between different views
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 
-import TextBox from "./components/TextBox";
-import LabelButton from "./components/LabelButton";
-import DropdownBox from "./components/Dropdown";
-import { TestingPostRequest } from "./api/NetworkCommands";
+import { HomeView } from "./views/HomeView";
+import { NewChatView } from "./views/NewChatView";
+import { UserLoginView } from "./views/UserLoginView";
+import { UserLogoutView } from "./views/UserLogoutView";
+import { UserRegisterView } from "./views/UserRegisterView";
+import { ConversationView } from "./views/ConversationView";
+
 import "./App.css";
 
 /*
@@ -35,37 +40,39 @@ import "./App.css";
 */
 
 function App() {
-  /*
-    Global Fields
-  */
-  // User Prompt - Text Box
-  const [userPrompt, setUserPrompt] = useState("");
-  // Model Name - Dropdown Box
-  const [modelName, setModelName] = useState("");
+  const [username, setUsername] = useState("");
 
+  const updateUsername = (userName: string) => {
+    setUsername(userName);
+    console.log(username);
+  };
+
+  // Change the views tomorrow
   return (
-    <div className="App">
-      <h1>Local LLM</h1>
-      <TextBox
-        placeholder="Type something..."
-        onChange={(value) => setUserPrompt(value)}
-      />
-
-      <LabelButton
-        label="Click to post to Backend"
-        onClick={TestingPostRequest}
-      />
-      {/* AlertOnClick(text) */}
-
-      <p>You typed: {userPrompt}</p>
-
-      <DropdownBox
-        placeholder="OLLAMA"
-        options={["OLLAMA", "CHATGPT", "PERPLEXITY"]}
-        handleModelSelect={setModelName}
-      ></DropdownBox>
-      <p>Selected Model: {modelName}</p>
-    </div>
+    <BrowserRouter>
+      <div>
+        <Routes>
+          <Route path="/" element={<HomeView />} />
+          <Route
+            path="/login"
+            element={<UserLoginView setUsernameCallback={updateUsername} />}
+          />
+          <Route path="/register" element={<UserRegisterView />} />
+          <Route
+            path="/conversations"
+            element={<ConversationView username={username} />}
+          />
+          <Route
+            path="/new_chat"
+            element={<NewChatView username={username} />}
+          />
+          <Route
+            path="/logout"
+            element={<UserLogoutView setUsernameCallback={updateUsername} />}
+          />
+        </Routes>
+      </div>
+    </BrowserRouter>
   );
 }
 
