@@ -1,12 +1,12 @@
 /* src/components/TextBox.css */
 .text-box {
   width: 100%;
-  padding: 10px;
-  margin: 10px 0;
   box-sizing: border-box;
   font-size: 16px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  padding: 10px;
+  margin: 10px;
 }
 
 .text-box:focus {

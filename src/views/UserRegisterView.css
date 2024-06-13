@@ -1,0 +1,8 @@
+.textBox {
+  position: relative;
+  display: block;
+  margin: 10px;
+  width: 100%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

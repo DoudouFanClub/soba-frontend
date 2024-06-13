@@ -4,18 +4,14 @@ import "./LabelButton.css";
 interface ButtonProps {
   label: string;
   onClick?: () => void;
+  cssProps?: string;
   type?: "button" | "submit" | "reset";
   disabled?: boolean;
 }
 
-function LabelButton({ label, onClick, type, disabled }: ButtonProps) {
+function LabelButton({ label, onClick, cssProps = "button", type, disabled }: ButtonProps) {
   return (
-    <button
-      className="button"
-      onClick={onClick}
-      type={type}
-      disabled={disabled}
-    >
+    <button className={cssProps} onClick={onClick} type={type} disabled={disabled}>
       {label}
     </button>
   );

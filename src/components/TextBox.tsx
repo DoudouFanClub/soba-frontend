@@ -3,10 +3,11 @@ import "./TextBox.css";
 
 interface TextBoxProps {
   placeholder?: string;
+  cssProps?: string;
   onChange?: (value: string) => void;
 }
 
-function TextBox({ placeholder, onChange }: TextBoxProps) {
+function TextBox({ placeholder, cssProps = "text-box", onChange }: TextBoxProps) {
   const [inputValue, setInputValue] = useState("");
 
   // On Change, Update Value in TextBoxProps
@@ -19,15 +20,7 @@ function TextBox({ placeholder, onChange }: TextBoxProps) {
   };
 
   // Return a JSX
-  return (
-    <input
-      type="text"
-      className="text-box"
-      placeholder={placeholder}
-      value={inputValue}
-      onChange={handleChange}
-    />
-  );
+  return <input type="text" className={cssProps} placeholder={placeholder} value={inputValue} onChange={handleChange} />;
 }
 
 export default TextBox;

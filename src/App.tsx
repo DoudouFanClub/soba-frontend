@@ -4,7 +4,7 @@ import { useState } from "react";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 
 import { HomeView } from "./views/HomeView";
-import { NewChatView } from "./views/NewChatView";
+//import { NewChatView } from "./views/NewChatView";
 import { UserLoginView } from "./views/UserLoginView";
 import { UserLogoutView } from "./views/UserLogoutView";
 import { UserRegisterView } from "./views/UserRegisterView";
@@ -39,6 +39,11 @@ import "./App.css";
     - Rename
 */
 
+/*
+  To Do:
+  - Create generic *.css file for "createConversationHiddenOverlay" and "createConversationPanel" (Place them in App.css)
+*/
+
 function App() {
   const [username, setUsername] = useState("");
 
@@ -52,24 +57,18 @@ function App() {
     <BrowserRouter>
       <div>
         <Routes>
-          <Route path="/" element={<HomeView />} />
-          <Route
+          <Route path="/" element={<HomeView setUsernameCallback={updateUsername} />} />
+          {/* <Route
             path="/login"
             element={<UserLoginView setUsernameCallback={updateUsername} />}
-          />
+          /> */}
           <Route path="/register" element={<UserRegisterView />} />
-          <Route
-            path="/conversations"
-            element={<ConversationView username={username} />}
-          />
-          <Route
+          <Route path="/conversations" element={<ConversationView username={username} />} />
+          {/* <Route
             path="/new_chat"
             element={<NewChatView username={username} />}
-          />
-          <Route
-            path="/logout"
-            element={<UserLogoutView setUsernameCallback={updateUsername} />}
-          />
+          /> */}
+          <Route path="/logout" element={<UserLogoutView setUsernameCallback={updateUsername} />} />
         </Routes>
       </div>
     </BrowserRouter>

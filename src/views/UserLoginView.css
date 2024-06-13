@@ -1,0 +1,25 @@
+.usernameTextBoxStyle {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 40%;
+  left: 50%;
+  width: 80%;
+  height: 7%;
+  padding: 0px 0px 0px 0px;
+  padding-left: 5px;
+  border: 0px;
+  box-sizing: border-box;
+}
+
+.passwordTextBoxStyle {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 55%;
+  left: 50%;
+  width: 80%;
+  height: 7%;
+  padding: 0px 0px 0px 0px;
+  padding-left: 5px;
+  border: 0px;
+  box-sizing: border-box;
+}

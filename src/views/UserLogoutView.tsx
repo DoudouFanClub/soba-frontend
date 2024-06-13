@@ -10,9 +10,7 @@ interface SetUsernameCallback {
   setUsernameCallback: (username: string) => void;
 }
 
-export const UserLogoutView = ({
-  setUsernameCallback,
-}: SetUsernameCallback) => {
+export const UserLogoutView = ({ setUsernameCallback }: SetUsernameCallback) => {
   const navigate = useNavigate();
 
   const [title, setTitle] = useState("");
