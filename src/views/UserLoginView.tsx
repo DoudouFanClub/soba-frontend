@@ -19,23 +19,20 @@ export const UserLoginView = ({ setUsernameCallback, setDisableView }: usernameC
   const [password, setPassword] = useState("");
 
   const handleOnClickLogin = async () => {
-    // if Pass
+    // If Pass
     setUsernameCallback(username);
 
-    const reply: string = await LoginRequest(username, password);
+    const reply: ApiResponse = await LoginRequest(username, password);
 
-    switch (reply) {
-      //true
+    switch (reply.response) {
       case "success": {
         navigate("/conversations");
         break;
       }
-
       case "failure": {
         alert("Failed To Login, Wrong Password!");
         break;
       }
-
       case "invalid": {
         alert("Failed To Login, User Does Not Exist!");
       }
@@ -58,7 +55,7 @@ export const UserLoginView = ({ setUsernameCallback, setDisableView }: usernameC
           <TextBox placeholder="Username" cssProps="usernameTextBoxStyle" onChange={(value) => setUsername(value)} />
           <TextBox placeholder="Password" cssProps="passwordTextBoxStyle" onChange={(value) => setPassword(value)} />
 
-          <LabelButton label="Login" onClick={handleOnClickLogin} />
+          <LabelButton label="Login" onClick={handleOnClickLogin} cssProps="loginButton"/>
         </div>
       </div>
     </>,

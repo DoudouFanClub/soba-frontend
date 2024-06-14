@@ -1,0 +1,17 @@
+.textBlock {
+  margin: 30px;
+  max-width: 70%;
+  border: 1px solid #ccc; /* Example border styling */
+  border-radius: 10px; /* Adjust the border radius as needed */
+}
+
+.textBlock.left {
+  text-align: left;
+  padding-left: 10px;
+}
+
+.textBlock.right {
+  text-align: right;
+  margin-left: auto;
+  padding-right: 10px;
+}

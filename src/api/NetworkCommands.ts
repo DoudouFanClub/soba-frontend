@@ -7,11 +7,21 @@ export interface ApiResponse {
   response: string;
 }
 
-export interface ApiUserTitlesResponse {
+export interface ApiStringArrayResponse {
   response: string[];
 }
 
-export const LoginRequest = async (username: string, password: string, convo: string[] = []): Promise<string> => {
+export interface ApiMessage {
+  Role: string;
+  Content: string;
+}
+
+export interface ApiMessageArrayResponse {
+  Title: string;
+  Messages: ApiMessage[];
+}
+
+export const LoginRequest = async (username: string, password: string, convo: string[] = []): Promise<ApiResponse> => {
   console.log("Sending POST Login Request");
   try {
     const response = await axios.post(
@@ -27,10 +37,14 @@ export const LoginRequest = async (username: string, password: string, convo: st
         },
       }
     );
-    return response.data === "success" ? "success" : "failure";
+    return response.data;
   } catch (error) {
     console.error("Error:", error);
-    return "failure";
+
+    const errorMsg: ApiResponse = {
+      response: "error",
+    };
+    return errorMsg;
   }
 };
 
@@ -57,7 +71,11 @@ export const LogoutRequest = async (username: string, title: string) => {
   }
 };
 
-export const RegisterRequest = async (username: string, password: string, convo: string[] = []): Promise<ApiResponse> => {
+export const RegisterRequest = async (
+  username: string,
+  password: string,
+  convo: string[] = []
+): Promise<ApiResponse> => {
   console.log("Sending POST Register Request");
 
   // Include a check here prior to publishing to see whether both passwords match
@@ -149,7 +167,7 @@ export const RenameChatRequest = async (username: string, currTitle: string, new
   }
 };
 
-export const LoadChatRequest = async (username: string, title: string) => {
+export const LoadChatRequest = async (username: string, title: string): Promise<ApiMessageArrayResponse> => {
   console.log("Sending GET Chat Request");
   try {
     const response = await axios.post(
@@ -165,11 +183,18 @@ export const LoadChatRequest = async (username: string, title: string) => {
       }
     );
     console.log(response);
+    return response.data;
 
     // Take response.data and filter it into a TextBlock (string[])
     // and return it to render
   } catch (error) {
     console.error("Error:", error);
+
+    const errorMsg: ApiMessageArrayResponse = {
+      Title: "",
+      Messages: [],
+    };
+    return errorMsg;
   }
 };
 
@@ -224,7 +249,7 @@ export const UserQueryRequest = async (username: string, title: string, content:
   }
 };
 
-export const RetrieveConversationTitlesRequest = async (username: string): Promise<ApiUserTitlesResponse> => {
+export const RetrieveConversationTitlesRequest = async (username: string): Promise<ApiStringArrayResponse> => {
   console.log("Attempting to Retrieve Conversation Titles");
   try {
     const response = await axios.post(
@@ -245,7 +270,7 @@ export const RetrieveConversationTitlesRequest = async (username: string): Promi
   } catch (error) {
     console.error("Error:", error);
 
-    const errResponse: ApiUserTitlesResponse = {
+    const errResponse: ApiStringArrayResponse = {
       response: [],
     };
 

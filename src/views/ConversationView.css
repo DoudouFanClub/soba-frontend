@@ -1,6 +1,29 @@
+.conversationPageLayout {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+}
+
+.conversationTopicsDisplayLayout {
+  border: 0px;
+  margin-top: 5vh;
+  height: 95vh;
+  width: 350px;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+
+.conversationMainChatLayout {
+  flex: 1;
+}
+
 .conversationTopicButtons {
   padding: 10px 20px;
-  margin-bottom: 10px;
+  margin-top: 10px;
   font-size: 16px;
   color: white;
   background-color: #506275;

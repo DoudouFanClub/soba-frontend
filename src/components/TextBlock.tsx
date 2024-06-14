@@ -1,9 +1,16 @@
 import React, { useState } from "react";
 
-interface ConversationProps {
-    convo: string;
+import "./TextBlock.css";
+
+interface TextBlockProps {
+  text: string;
+  side: "left" | "right";
 }
 
-// function TextBlock({ convo }: ConversationProps) {
-    
-// }
+export const TextBlock = ({ text, side }: TextBlockProps) => {
+  return (
+    <div className={"textBlock " + side}>
+      <p>{text}</p>
+    </div>
+  );
+};
