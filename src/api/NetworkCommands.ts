@@ -11,11 +11,7 @@ export interface ApiUserTitlesResponse {
   response: string[];
 }
 
-export const LoginRequest = async (
-  username: string,
-  password: string,
-  convo: string[] = []
-) => {
+export const LoginRequest = async (username: string, password: string, convo: string[] = []): Promise<string> => {
   console.log("Sending POST Login Request");
   try {
     const response = await axios.post(
@@ -31,13 +27,10 @@ export const LoginRequest = async (
         },
       }
     );
-
-    // setResponseData(response.data);
-    // Check Response Data
-    // Success: Handle by changing the View to the Conversation Page
-    // Fail: Display "Wrong Password" message and re-prompt
+    return response.data === "success" ? "success" : "failure";
   } catch (error) {
     console.error("Error:", error);
+    return "failure";
   }
 };
 
@@ -64,11 +57,7 @@ export const LogoutRequest = async (username: string, title: string) => {
   }
 };
 
-export const RegisterRequest = async (
-  username: string,
-  password: string,
-  convo: string[] = []
-): Promise<ApiResponse> => {
+export const RegisterRequest = async (username: string, password: string, convo: string[] = []): Promise<ApiResponse> => {
   console.log("Sending POST Register Request");
 
   // Include a check here prior to publishing to see whether both passwords match
@@ -105,11 +94,7 @@ export const RegisterRequest = async (
   }
 };
 
-export const NewChatRequest = async (
-  username: string,
-  title: string,
-  model: string
-) => {
+export const NewChatRequest = async (username: string, title: string, model: string) => {
   console.log("Sending POST New Chat Request");
   try {
     const response = await axios.post(
@@ -137,11 +122,7 @@ export const NewChatRequest = async (
   }
 };
 
-export const RenameChatRequest = async (
-  username: string,
-  currTitle: string,
-  newTitle: string
-) => {
+export const RenameChatRequest = async (username: string, currTitle: string, newTitle: string) => {
   console.log("Sending POST Rename Chat Request");
 
   // Check currTitle to make sure we can change (diff Title)
@@ -217,11 +198,7 @@ export const DeleteChatRequest = async (username: string, title: string) => {
   }
 };
 
-export const UserQueryRequest = async (
-  username: string,
-  title: string,
-  content: string
-) => {
+export const UserQueryRequest = async (username: string, title: string, content: string) => {
   console.log("Sending POST User Query Request");
   try {
     const response = await axios.post(
@@ -247,9 +224,7 @@ export const UserQueryRequest = async (
   }
 };
 
-export const RetrieveConversationTitlesRequest = async (
-  username: string
-): Promise<ApiUserTitlesResponse> => {
+export const RetrieveConversationTitlesRequest = async (username: string): Promise<ApiUserTitlesResponse> => {
   console.log("Attempting to Retrieve Conversation Titles");
   try {
     const response = await axios.post(
@@ -265,6 +240,7 @@ export const RetrieveConversationTitlesRequest = async (
       }
     );
 
+    //console.log(response.data);
     return response.data;
   } catch (error) {
     console.error("Error:", error);

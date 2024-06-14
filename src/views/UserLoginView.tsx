@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import TextBox from "./../components/TextBox";
 import LabelButton from "./../components/LabelButton";
-import { LoginRequest } from "./../api/NetworkCommands";
+import { ApiResponse, LoginRequest, RegisterRequest } from "./../api/NetworkCommands";
 import { useNavigate } from "react-router-dom";
 import ReactDOM from "react-dom";
 import "./UserLoginView.css";
@@ -13,24 +13,33 @@ interface usernameCallbackProp {
 }
 
 export const UserLoginView = ({ setUsernameCallback, setDisableView }: usernameCallbackProp) => {
-  const navgiate = useNavigate();
+  const navigate = useNavigate();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleDisableView = () => {
-    setDisableView();
-  };
-  const handleOnClickLogin = () => {
+  const handleOnClickLogin = async () => {
     // if Pass
     setUsernameCallback(username);
 
-    // need to call POST request later
+    const reply: string = await LoginRequest(username, password);
 
-    // if Failed
+    switch (reply) {
+      //true
+      case "success": {
+        navigate("/conversations");
+        break;
+      }
 
-    // View navigation
-    navgiate("/conversations");
+      case "failure": {
+        alert("Failed To Login, Wrong Password!");
+        break;
+      }
+
+      case "invalid": {
+        alert("Failed To Login, User Does Not Exist!");
+      }
+    }
   };
 
   useEffect(() => {
@@ -45,11 +54,11 @@ export const UserLoginView = ({ setUsernameCallback, setDisableView }: usernameC
     <>
       <div className="createConversationHiddenOverlay" onClick={setDisableView}>
         <div className="createConversationPanel" onClick={portalOnClick}>
-          <h1 className="headerTitle">Register Account</h1>
+          <h1 className="headerTitle">Login</h1>
           <TextBox placeholder="Username" cssProps="usernameTextBoxStyle" onChange={(value) => setUsername(value)} />
           <TextBox placeholder="Password" cssProps="passwordTextBoxStyle" onChange={(value) => setPassword(value)} />
 
-          {/* <LabelButton label="Register" onClick={handleRegister} /> */}
+          <LabelButton label="Login" onClick={handleOnClickLogin} />
         </div>
       </div>
     </>,
