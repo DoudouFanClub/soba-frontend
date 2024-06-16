@@ -41,3 +41,16 @@
 .conversationTopicButtons:hover {
   background-color: #506275a1;
 }
+
+.conversationTextBox {
+  position: absolute;
+  width: 75%;
+  box-sizing: border-box;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+  left: 23%;
+  margin: 10px;
+  bottom: 10px;
+}

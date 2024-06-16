@@ -13,6 +13,7 @@ import {
 
 import "./ConversationView.css";
 import { TextContainer } from "../components/TextContainer";
+import TextBox from "../components/TextBox";
 
 interface UserProps {
   username: string;
@@ -80,6 +81,8 @@ export const ConversationView = ({ username }: UserProps) => {
         {messages && <TextContainer conversation={messages} />}
 
         {visible && <NewChatPortalView handleOnClick={handleOnClick} />}
+        {<TextBox cssProps="conversationTextBox"/>}
+        
         <LabelButton label="Create Conversation" onClick={handleCreateConversionClick} />
         <LabelButton label="Logout" onClick={() => navgiate("/logout")} />
       </div>
