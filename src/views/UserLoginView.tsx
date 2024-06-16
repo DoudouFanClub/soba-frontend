@@ -1,10 +1,11 @@
+import ReactDOM from "react-dom";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import TextBox from "./../components/TextBox";
 import LabelButton from "./../components/LabelButton";
-import { ApiResponse, LoginRequest, RegisterRequest } from "./../api/NetworkCommands";
-import { useNavigate } from "react-router-dom";
-import ReactDOM from "react-dom";
+import { ApiResponse, LoginRequest } from "../api/ServerAccessApi";
+
 import "./UserLoginView.css";
 
 interface usernameCallbackProp {
@@ -43,6 +44,8 @@ export const UserLoginView = ({ setUsernameCallback, setDisableView }: usernameC
     setUsernameCallback(username);
   }, [username]);
 
+  // To prevent clicks on the View within the Login page
+  // to navigate back to the Home View
   const portalOnClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
   };
@@ -52,23 +55,14 @@ export const UserLoginView = ({ setUsernameCallback, setDisableView }: usernameC
       <div className="createConversationHiddenOverlay" onClick={setDisableView}>
         <div className="createConversationPanel" onClick={portalOnClick}>
           <h1 className="headerTitle">Login</h1>
+
           <TextBox placeholder="Username" cssProps="usernameTextBoxStyle" onChange={(value) => setUsername(value)} />
           <TextBox placeholder="Password" cssProps="passwordTextBoxStyle" onChange={(value) => setPassword(value)} />
 
-          <LabelButton label="Login" onClick={handleOnClickLogin} cssProps="loginButton"/>
+          <LabelButton label="Login" onClick={handleOnClickLogin} cssProps="loginButton" />
         </div>
       </div>
     </>,
     document.body
   );
-
-  // return (
-  //   <div onClick={handleDisableView}>
-  //     <h1>Login Page</h1>
-  //     <TextBox placeholder="Username" cssProps="" onChange={(value) => setUsername(value)} />
-  //     <TextBox placeholder="Password" cssProps="" onChange={(value) => setPassword(value)} />
-  //     <LabelButton label="Login" onClick={handleOnClickLogin} />
-  //     <LabelButton label="Register" onClick={() => navgiate("/register")} />
-  //   </div>
-  // );
 };

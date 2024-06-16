@@ -1,4 +1,4 @@
-import { ApiMessage } from "../api/NetworkCommands";
+import { ApiMessage } from "../api/ServerActionApi";
 import { TextBlock } from "./TextBlock";
 
 import "./TextContainer.css";

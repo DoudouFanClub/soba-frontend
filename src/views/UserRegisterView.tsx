@@ -2,10 +2,10 @@ import { useState } from "react";
 
 import TextBox from "./../components/TextBox";
 import LabelButton from "./../components/LabelButton";
-import { RegisterRequest, ApiResponse } from "./../api/NetworkCommands";
 import { useNavigate } from "react-router-dom";
 import "./UserRegisterView.css";
 import ReactDOM from "react-dom";
+import { ApiResponse, RegisterRequest } from "../api/ServerAccessApi";
 
 interface changeViewProps {
   changeView: (newView: string) => void;
@@ -31,64 +31,31 @@ export const UserRegisterView = () => {
       switch (reply.response) {
         //true
         case "success": {
-          //const reply: ApiResponse = await RegisterRequest(username, password);
           navigate("/conversations");
 
           break;
         }
-
         case "failure": {
           alert("Failed to register, Username exists!");
           break;
         }
       }
     };
-
-    //RunLogic();
-    // const response : string = await RegisterRequest(username, password);
-
-    // switch (response) {
-    //   //true
-    //   case "success": {
-    //     // retrieve conversations using a get request
-    //     navigate("/conversations");
-
-    //     break;
-    //   }
-
-    //   case "failure": {
-    //     alert("Failed to register, username exists");
-    //     break;
-    //   }
-    // }
   };
 
-  // return (
-  //   <div>
-  //     <h1>Register Account</h1>
-
-  //     <TextBox placeholder="Username" cssProps="textBox" onChange={(value) => setUsername(value)} />
-
-  //     <TextBox placeholder="Password" cssProps="textBox" onChange={(value) => setPassword(value)} />
-
-  //     <TextBox placeholder="Confirm Password" cssProps="textBox" onChange={(value) => setConfirmPassword(value)} />
-
-  //     <p></p>
-  //     <LabelButton label="Register" onClick={handleRegister} />
-  //   </div>
-  // );
+  // To prevent clicks on the View within the Login page
+  // to navigate back to the Home View
+  const portalOnClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+  };
 
   return ReactDOM.createPortal(
     <>
       <div>
         <h1>Register Account</h1>
-
         <TextBox placeholder="Username" cssProps="textBox" onChange={(value) => setUsername(value)} />
-
         <TextBox placeholder="Password" cssProps="textBox" onChange={(value) => setPassword(value)} />
-
         <TextBox placeholder="Confirm Password" cssProps="textBox" onChange={(value) => setConfirmPassword(value)} />
-
         <LabelButton label="Register" onClick={handleRegister} />
       </div>
     </>,
