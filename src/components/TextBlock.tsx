@@ -8,7 +8,13 @@ interface TextBlockProps {
 export const TextBlock = ({ text, side }: TextBlockProps) => {
   return (
     <div className={"textBlock " + side}>
-      <p>{text}</p>
+      {side === "left" && (
+        <div>
+          <p style={{ fontStyle: "italic", fontWeight: "bold" }}>Local LLM </p>
+          <p>{text}</p>
+        </div>
+      )}
+      {side === "right" && <p>{text}</p>}
     </div>
   );
 };

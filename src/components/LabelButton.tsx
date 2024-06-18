@@ -1,5 +1,6 @@
 import React from "react";
 import "./LabelButton.css";
+// import defaultStyle from "./LabelButton.css";
 
 interface ButtonProps {
   label: string;
@@ -11,7 +12,7 @@ interface ButtonProps {
 
 function LabelButton({ label, onClick, cssProps = "button", type, disabled }: ButtonProps) {
   return (
-    <button className={cssProps} onClick={onClick} type={type} disabled={disabled}>
+    <button className={` ${cssProps} button`} onClick={onClick} type={type} disabled={disabled}>
       {label}
     </button>
   );

@@ -1,31 +1,21 @@
 /* src/components/Button.css */
 .button {
   padding: 10px 20px;
-  margin: 10px;
+  margin-top: 10px;
   font-size: 16px;
   color: white;
-  background-color: #007bff;
+  background-color: #444;
+  /* background-color: rgba(211, 211, 211, 0.6); */
   border: none;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s;
-}
-
-.button-spacing-right {
-  padding: 10px 20px;
-  margin: 10px 0;
-  margin-right: 10px 0;
-  font-size: 16px;
-  color: white;
-  background-color: #007bff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
+  border-radius: 50px;
+  box-sizing: border-box;
 }
 
 .button:hover {
-  background-color: #0056b3;
+  background-color: rgba(211, 211, 211, 0.4);
 }
 
 .button:disabled {

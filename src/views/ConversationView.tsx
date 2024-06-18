@@ -8,6 +8,7 @@ import { TextContainer } from "../components/TextContainer";
 import TextBox from "../components/TextBox";
 import { Scrollbar } from "../components/Scrollbar";
 import { ApiMessage, ApiStringArrayResponse, LoadChatRequest, RetrieveConversationTitlesRequest, HandleSendMessage } from "../api/ServerActionApi";
+import TextArea from "../components/TextArea";
 
 interface UserProps {
   username: string;
@@ -45,9 +46,7 @@ export const ConversationView = ({ username }: UserProps) => {
     isVisible(true);
   };
 
-  const createChatBubble = () => {
-
-  };
+  const createChatBubble = () => {};
 
   // To enable conversation view to begin from the bottom
   // each time messages[] is modified
@@ -72,21 +71,23 @@ export const ConversationView = ({ username }: UserProps) => {
   return (
     <div className="overviewPageLayout">
       <div className="leftViewLayout">
+        <div className="leftOptionsLayout">
+          <LabelButton label="Create Conversation" onClick={handleCreateConversionClick} />
+          <LabelButton label="Logout" onClick={() => navgiate("/logout")} />
+        </div>
         {titles && <Scrollbar placeholder="Loading Titles..." username={username} values={titles} onSelect={handleTopicSelcted} />}
       </div>
       <div className="rightViewLayout">
         <div className="conversationTextBlockLayout" ref={scrollRef}>
           <h1>Conversation Page</h1>
           {messages && <TextContainer conversation={messages} />}
-          <LabelButton label="Create Conversation" onClick={handleCreateConversionClick} />
-          <LabelButton label="Logout" onClick={() => navgiate("/logout")} />
         </div>
 
         {visible && <NewChatPortalView handleOnClick={handleOnClick} />}
 
         <div className="conversationUserPromptLayout">
-          <TextBox cssProps="conversationTextBox" onChange={(value) => setPrompt(value)}/>
-          <LabelButton label="Send" onClick={HandleSendMessage(prompt, createChatBubble)} />
+          <TextArea cssProps="conversationTextBox" onChange={(value) => setPrompt(value)} placeholder="Ask anything..." />
+          <LabelButton cssProps="conversationSendButton" label="Send" onClick={HandleSendMessage(prompt, createChatBubble)} />
         </div>
       </div>
     </div>

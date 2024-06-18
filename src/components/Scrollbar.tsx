@@ -1,4 +1,6 @@
+import React from "react";
 import LabelButton from "./LabelButton";
+import "./Scrollbar.css";
 
 interface ScrollbarProps {
   placeholder: string;
@@ -8,14 +10,21 @@ interface ScrollbarProps {
 }
 
 export const Scrollbar = ({ placeholder, username, values, onSelect }: ScrollbarProps) => {
+  const [activeButton, setActiveButton] = React.useState("");
+
+  const handleOnClick = (username: string, title: string) => {
+    onSelect(username, title);
+    setActiveButton(title);
+  };
+
   return (
-    <div>
+    <div className="scrollbarStyle">
       {values ? (
         values.map((titleName, index) => (
           <LabelButton
             label={titleName}
-            onClick={() => onSelect(username, titleName)}
-            cssProps="conversationTopicButtons"
+            onClick={() => handleOnClick(username, titleName)}
+            cssProps={`${titleName}` === `${activeButton}` ? "conversationTopicButtonsClicked" : "conversationTopicButtons"}
           />
         ))
       ) : (
