@@ -49,9 +49,16 @@ export const LoadChatRequest = async (username: string, title: string): Promise<
   }
 };
 
-export const HandleSendMessage = (msg: string, callback: React.Dispatch<React.SetStateAction<string>>) => {
+export const HandleSendMessage = (msg: string, msges: ApiMessage[]) => {
   const handleClick = async () => {
     try {
+      const userMsg : ApiMessage = {
+        Role: "user",
+        Content: msg
+      }
+      msges.push(userMsg);
+      // check for original length
+      const origLength = msges.length;
       const response = await fetch("http://localhost:8080/send_message", {
         method: "POST",
         body: JSON.stringify(msg),
@@ -80,7 +87,19 @@ export const HandleSendMessage = (msg: string, callback: React.Dispatch<React.Se
       while ((result = await streamReader.read()) !== undefined) {
         if (result.done)
           break;
-        callback(decoder.decode(result.value));
+        // if no new message appended yet, append
+        if (msges.length == origLength) {
+          const apiMessage: ApiMessage = {
+            Role: "assistant",
+            Content: ""
+          };
+          msges.push(apiMessage);
+          msges[origLength].Content += decoder.decode(result.value);
+        }
+        // else add on to the contents of the current message being generated
+        else {
+          msges[origLength].Content += decoder.decode(result.value);
+        }
       } 
     } catch (error) {
       console.error("Error:", error);

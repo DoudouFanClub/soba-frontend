@@ -22,7 +22,7 @@ export const ConversationView = ({ username }: UserProps) => {
   const [prompt, setPrompt] = useState("");
 
   const [titles, setTitles] = useState<string[]>();
-  const [messages, setMessages] = useState<ApiMessage[]>();
+  const [messages, setMessages] = useState<ApiMessage[]>([]);
 
   useEffect(() => {
     const handleInitialization = async () => {
@@ -45,8 +45,6 @@ export const ConversationView = ({ username }: UserProps) => {
   const handleCreateConversionClick = () => {
     isVisible(true);
   };
-
-  const createChatBubble = () => {};
 
   // To enable conversation view to begin from the bottom
   // each time messages[] is modified
@@ -87,7 +85,7 @@ export const ConversationView = ({ username }: UserProps) => {
 
         <div className="conversationUserPromptLayout">
           <TextArea cssProps="conversationTextBox" onChange={(value) => setPrompt(value)} placeholder="Ask anything..." />
-          <LabelButton cssProps="conversationSendButton" label="Send" onClick={HandleSendMessage(prompt, createChatBubble)} />
+          <LabelButton cssProps="conversationSendButton" label="Send" onClick={HandleSendMessage(prompt, messages)} />
         </div>
       </div>
     </div>
