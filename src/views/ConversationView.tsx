@@ -7,7 +7,7 @@ import "./ConversationView.css";
 import { TextContainer } from "../components/TextContainer";
 import TextBox from "../components/TextBox";
 import { Scrollbar } from "../components/Scrollbar";
-import { ApiMessage, ApiStringArrayResponse, LoadChatRequest, RetrieveConversationTitlesRequest } from "../api/ServerActionApi";
+import { ApiMessage, ApiStringArrayResponse, LoadChatRequest, RetrieveConversationTitlesRequest, HandleSendMessage } from "../api/ServerActionApi";
 
 interface UserProps {
   username: string;
@@ -18,6 +18,7 @@ export const ConversationView = ({ username }: UserProps) => {
 
   const [title, setTitle] = useState("");
   const [model, setModel] = useState("");
+  const [prompt, setPrompt] = useState("");
 
   const [titles, setTitles] = useState<string[]>();
   const [messages, setMessages] = useState<ApiMessage[]>();
@@ -42,6 +43,10 @@ export const ConversationView = ({ username }: UserProps) => {
 
   const handleCreateConversionClick = () => {
     isVisible(true);
+  };
+
+  const createChatBubble = () => {
+
   };
 
   // To enable conversation view to begin from the bottom
@@ -80,7 +85,8 @@ export const ConversationView = ({ username }: UserProps) => {
         {visible && <NewChatPortalView handleOnClick={handleOnClick} />}
 
         <div className="conversationUserPromptLayout">
-          <TextBox cssProps="conversationTextBox" />
+          <TextBox cssProps="conversationTextBox" onChange={(value) => setPrompt(value)}/>
+          <LabelButton label="Send" onClick={HandleSendMessage(prompt, createChatBubble)} />
         </div>
       </div>
     </div>

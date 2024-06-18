@@ -49,6 +49,48 @@ export const LoadChatRequest = async (username: string, title: string): Promise<
   }
 };
 
+export const HandleSendMessage = (msg: string, callback: React.Dispatch<React.SetStateAction<string>>) => {
+  const handleClick = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/send_message", {
+        method: "POST",
+        body: JSON.stringify(msg),
+        headers: {
+          "Content-type": "application/json",
+        },
+      });
+
+      // create the stream for the decoder to read from
+      const reader = response.body?.getReader();
+      const stream = new ReadableStream({
+        async pull(controller) {
+          const result = await reader?.read()
+          if (result?.done) {
+            controller.close();
+            return;
+          }
+          controller.enqueue(result?.value);
+        }
+      });
+
+      // consume the stream to invoke the callback to set the message
+      const decoder = new TextDecoder();
+      const streamReader = stream.getReader();
+      let result;
+      while ((result = await streamReader.read()) !== undefined) {
+        if (result.done)
+          break;
+        callback(decoder.decode(result.value));
+      } 
+    } catch (error) {
+      console.error("Error:", error);
+      return;
+    }
+  };
+
+  return handleClick;
+};
+
 export const RetrieveConversationTitlesRequest = async (username: string): Promise<ApiStringArrayResponse> => {
   console.log("Attempting to Retrieve Conversation Titles");
   try {
