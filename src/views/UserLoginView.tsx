@@ -9,25 +9,21 @@ import { ApiResponse, LoginRequest } from "../api/ServerAccessApi";
 import "./UserLoginView.css";
 
 interface usernameCallbackProp {
-  setUsernameCallback: (username: string) => void;
   setDisableView: () => void;
 }
 
-export const UserLoginView = ({ setUsernameCallback, setDisableView }: usernameCallbackProp) => {
+export const UserLoginView = ({ setDisableView }: usernameCallbackProp) => {
   const navigate = useNavigate();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const handleOnClickLogin = async () => {
-    // If Pass
-    setUsernameCallback(username);
-
     const reply: ApiResponse = await LoginRequest(username, password);
 
     switch (reply.response) {
       case "success": {
-        navigate("/conversations");
+        navigate("/conversations", { state: { username: `${username}` } });
         break;
       }
       case "failure": {
@@ -39,10 +35,6 @@ export const UserLoginView = ({ setUsernameCallback, setDisableView }: usernameC
       }
     }
   };
-
-  useEffect(() => {
-    setUsernameCallback(username);
-  }, [username]);
 
   // To prevent clicks on the View within the Login page
   // to navigate back to the Home View

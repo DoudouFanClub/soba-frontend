@@ -52,10 +52,11 @@ export const LoadChatRequest = async (username: string, title: string): Promise<
 export const HandleSendMessage = (msg: string, msges: ApiMessage[]) => {
   const handleClick = async () => {
     try {
-      const userMsg : ApiMessage = {
+      const userMsg: ApiMessage = {
         Role: "user",
-        Content: msg
-      }
+        Content: msg,
+      };
+      console.log("uh oh jeremy fked up");
       msges.push(userMsg);
       // check for original length
       const origLength = msges.length;
@@ -71,13 +72,13 @@ export const HandleSendMessage = (msg: string, msges: ApiMessage[]) => {
       const reader = response.body?.getReader();
       const stream = new ReadableStream({
         async pull(controller) {
-          const result = await reader?.read()
+          const result = await reader?.read();
           if (result?.done) {
             controller.close();
             return;
           }
           controller.enqueue(result?.value);
-        }
+        },
       });
 
       // consume the stream to invoke the callback to set the message
@@ -85,13 +86,12 @@ export const HandleSendMessage = (msg: string, msges: ApiMessage[]) => {
       const streamReader = stream.getReader();
       let result;
       while ((result = await streamReader.read()) !== undefined) {
-        if (result.done)
-          break;
+        if (result.done) break;
         // if no new message appended yet, append
         if (msges.length == origLength) {
           const apiMessage: ApiMessage = {
             Role: "assistant",
-            Content: ""
+            Content: "",
           };
           msges.push(apiMessage);
           msges[origLength].Content += decoder.decode(result.value);
@@ -100,7 +100,7 @@ export const HandleSendMessage = (msg: string, msges: ApiMessage[]) => {
         else {
           msges[origLength].Content += decoder.decode(result.value);
         }
-      } 
+      }
     } catch (error) {
       console.error("Error:", error);
       return;

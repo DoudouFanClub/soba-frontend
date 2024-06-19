@@ -5,12 +5,15 @@ import LabelButton from "../components/LabelButton";
 import "./NewChatView.css";
 import TextBox from "../components/TextBox";
 import DropdownBox from "../components/Dropdown";
+import { NewChatRequest } from "../api/UserActionApi";
 
 interface PortalWindowProp {
-  handleOnClick: () => void;
+  username: string;
+  handleClosePortal: () => void;
+  handleOnNewChatCreated: (username: string, titleName: string) => void;
 }
 
-export function NewChatPortalView({ handleOnClick }: PortalWindowProp) {
+export function NewChatPortalView({ username, handleClosePortal, handleOnNewChatCreated }: PortalWindowProp) {
   const [title, setTitle] = useState("");
   const [model, setModel] = useState("");
 
@@ -18,9 +21,33 @@ export function NewChatPortalView({ handleOnClick }: PortalWindowProp) {
     e.stopPropagation();
   };
 
+  const handleCreateNewConversation = async (username: string, title: string, model: string) => {
+    if (title.length > 50) {
+      alert("Title has exceeded 50 characters! Current Length: " + title.length.toString());
+      return;
+    }
+
+    var created: string = await NewChatRequest(username, title);
+
+    switch (created) {
+      case "success": {
+        handleClosePortal();
+        handleOnNewChatCreated(username, title);
+        break;
+      }
+      case "failure": {
+        alert("Title is currently in use!");
+        break;
+      }
+      default: {
+        alert(`Unhandled error when creating New Chat, backend response: ${created}`);
+      }
+    }
+  };
+
   return ReactDOM.createPortal(
     <>
-      <div className="createConversationHiddenOverlay" onClick={handleOnClick}>
+      <div className="createConversationHiddenOverlay" onClick={handleClosePortal}>
         <div className="createConversationPanel" onClick={portalOnClick}>
           <h1 className="headerTitle">Create a New Chat</h1>
           <TextBox placeholder="Title" onChange={setTitle} cssProps="titleTextBoxStyle" />
@@ -30,7 +57,7 @@ export function NewChatPortalView({ handleOnClick }: PortalWindowProp) {
             handleModelSelect={setModel}
             cssProps="modelDropdownBoxStyle"
           />
-          <LabelButton label="Confirm" onClick={handleOnClick} cssProps="confirmButtonStyle" />
+          <LabelButton label="Confirm" onClick={() => handleCreateNewConversation(username, title, model)} cssProps="confirmButtonStyle" />
         </div>
       </div>
     </>,

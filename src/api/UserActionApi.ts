@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const NewChatRequest = async (username: string, title: string, model: string) => {
+export const NewChatRequest = async (username: string, title: string): Promise<string> => {
   console.log("Sending POST New Chat Request");
   try {
     const response = await axios.post(
@@ -8,7 +8,6 @@ export const NewChatRequest = async (username: string, title: string, model: str
       {
         username: username,
         title: title,
-        model: model,
       },
       {
         headers: {
@@ -18,13 +17,10 @@ export const NewChatRequest = async (username: string, title: string, model: str
     );
     console.log(response);
 
-    // Check response data
-    // Success: Send request to add and load the empty convo
-    // Fail: Display whether its because there is already a chat with the same title
-    // Empty title
-    // Title too long
+    return response.data;
   } catch (error) {
     console.error("Error:", error);
+    return "failure";
   }
 };
 

@@ -32,12 +32,14 @@
 .conversationTextBlockLayout {
   flex: 1;
   overflow-y: auto; /* Enable vertical scroll if content overflows */
+  overflow-x: hidden;
 }
 
 .conversationUserPromptLayout {
   display: flex;
   max-height: 20%;
   align-items: end;
+  overflow-x: hidden;
 }
 
 .conversationTextBox {

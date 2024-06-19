@@ -53,15 +53,12 @@ export const LogoutRequest = async (username: string) => {
   }
 };
 
-export const RegisterRequest = async (
-  username: string,
-  password: string,
-  convo: string[] = []
-): Promise<ApiResponse> => {
+export const RegisterRequest = async (username: string, password: string, convo: string[] = []): Promise<ApiResponse> => {
   console.log("Sending POST Register Request");
 
   // Include a check here prior to publishing to see whether both passwords match
   // Display wrong password message here
+  // Check before sending request (??) ===============================!@!@!@!@!@
 
   try {
     const response = await axios.post(

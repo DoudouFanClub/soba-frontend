@@ -22,6 +22,7 @@ export const Scrollbar = ({ placeholder, username, values, onSelect }: Scrollbar
       {values ? (
         values.map((titleName, index) => (
           <LabelButton
+            key={index}
             label={titleName}
             onClick={() => handleOnClick(username, titleName)}
             cssProps={`${titleName}` === `${activeButton}` ? "conversationTopicButtonsClicked" : "conversationTopicButtons"}

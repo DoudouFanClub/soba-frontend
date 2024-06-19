@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LabelButton from "./../components/LabelButton";
 import { UserLoginView } from "./UserLoginView";
+import { UserRegisterView } from "./UserRegisterView";
 
 interface usernameCallbackProp {
   setUsernameCallback: (username: string) => void;
@@ -28,14 +29,13 @@ export const HomeView = ({ setUsernameCallback }: usernameCallbackProp) => {
     setRegisterVisible(true);
   };
 
-  // To Do: Register View Still Needs To Be Refactored
   return (
     <div>
       <h1>Local LLM</h1>
-      {loginVisible && <UserLoginView setDisableView={handleDisableLogin} setUsernameCallback={setUsernameCallback} />}
+      {loginVisible && <UserLoginView setDisableView={handleDisableLogin} />}
       <LabelButton label="Login" onClick={handleEnableLogin} />
 
-      {registerVisible && <UserLoginView setDisableView={handleDisableRegister} setUsernameCallback={setUsernameCallback} />}
+      {registerVisible && <UserRegisterView setDisableView={handleDisableRegister} />}
       <LabelButton label="Register" onClick={handleEnableRegister} />
     </div>
   );

@@ -62,8 +62,8 @@ function App() {
             path="/login"
             element={<UserLoginView setUsernameCallback={updateUsername} />}
           /> */}
-          <Route path="/register" element={<UserRegisterView />} />
-          <Route path="/conversations" element={<ConversationView username={username} />} />
+          {/* <Route path="/register" element={<UserRegisterView />} /> */}
+          <Route path="/conversations" element={<ConversationView />} />
           {/* <Route
             path="/new_chat"
             element={<NewChatView username={username} />}

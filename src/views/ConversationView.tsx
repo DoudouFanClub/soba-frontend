@@ -1,20 +1,16 @@
+import { TextareaHTMLAttributes, useEffect, useRef, useState } from "react";
 import LabelButton from "./../components/LabelButton";
-import { useNavigate } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
 import { NewChatPortalView } from "../views/NewChatView";
+import { useLocation, useNavigate } from "react-router-dom";
+
+import TextArea from "../components/TextArea";
+import { Scrollbar } from "../components/Scrollbar";
+import { TextContainer } from "../components/TextContainer";
+import { ApiMessage, ApiStringArrayResponse, LoadChatRequest, RetrieveConversationTitlesRequest, HandleSendMessage } from "../api/ServerActionApi";
 
 import "./ConversationView.css";
-import { TextContainer } from "../components/TextContainer";
-import TextBox from "../components/TextBox";
-import { Scrollbar } from "../components/Scrollbar";
-import { ApiMessage, ApiStringArrayResponse, LoadChatRequest, RetrieveConversationTitlesRequest, HandleSendMessage } from "../api/ServerActionApi";
-import TextArea from "../components/TextArea";
 
-interface UserProps {
-  username: string;
-}
-
-export const ConversationView = ({ username }: UserProps) => {
+export const ConversationView = () => {
   const navgiate = useNavigate();
 
   const [title, setTitle] = useState("");
@@ -24,6 +20,9 @@ export const ConversationView = ({ username }: UserProps) => {
   const [titles, setTitles] = useState<string[]>();
   const [messages, setMessages] = useState<ApiMessage[]>([]);
 
+  const location = useLocation();
+  const { username } = location.state;
+
   useEffect(() => {
     const handleInitialization = async () => {
       console.log("Entered Conversation View");
@@ -32,8 +31,10 @@ export const ConversationView = ({ username }: UserProps) => {
     };
 
     handleInitialization();
+    console.log("Location test: ", username);
+    console.log("Username: ", username);
     console.log("Title updated:", titles);
-  }, []);
+  }, [title]);
 
   // Toggle portal visibility
   const [visible, isVisible] = useState(false);
@@ -58,12 +59,19 @@ export const ConversationView = ({ username }: UserProps) => {
 
   const handleTopicSelcted = (username: string, titleName: string) => {
     console.log("Selected a conversation:", titleName);
+    console.log(`Name: ${username},  title: ${titleName}`);
     const handleRetrieveMessages = async () => {
       const reply = await LoadChatRequest(username, titleName);
-      console.log(reply.Messages[0].Content);
+      console.log("chicken nugget: ", reply.Messages.length > 0 && reply.Messages[0].Content);
       setMessages(reply.Messages);
     };
+
+    setTitle(titleName);
     handleRetrieveMessages();
+  };
+
+  const onUserEnterInTextArea = () => {
+    HandleSendMessage(prompt, messages);
   };
 
   return (
@@ -73,6 +81,7 @@ export const ConversationView = ({ username }: UserProps) => {
           <LabelButton label="Create Conversation" onClick={handleCreateConversionClick} />
           <LabelButton label="Logout" onClick={() => navgiate("/logout")} />
         </div>
+
         {titles && <Scrollbar placeholder="Loading Titles..." username={username} values={titles} onSelect={handleTopicSelcted} />}
       </div>
       <div className="rightViewLayout">
@@ -81,11 +90,11 @@ export const ConversationView = ({ username }: UserProps) => {
           {messages && <TextContainer conversation={messages} />}
         </div>
 
-        {visible && <NewChatPortalView handleOnClick={handleOnClick} />}
+        {visible && <NewChatPortalView username={username} handleClosePortal={handleOnClick} handleOnNewChatCreated={handleTopicSelcted} />}
 
         <div className="conversationUserPromptLayout">
-          <TextArea cssProps="conversationTextBox" onChange={(value) => setPrompt(value)} placeholder="Ask anything..." />
-          <LabelButton cssProps="conversationSendButton" label="Send" onClick={HandleSendMessage(prompt, messages)} />
+          <TextArea cssProps="conversationTextBox" onChange={(value) => setPrompt(value)} placeholder="Ask anything..." onEnterDown={onUserEnterInTextArea} />
+          <LabelButton cssProps="conversationSendButton" label="Send" onClick={() => HandleSendMessage(prompt, messages)} />
         </div>
       </div>
     </div>

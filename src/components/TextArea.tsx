@@ -5,9 +5,10 @@ interface TextBoxProps {
   placeholder?: string;
   cssProps?: string;
   onChange?: (value: string) => void;
+  onEnterDown?: () => void;
 }
 
-function TextBox({ placeholder, cssProps = "textBox", onChange }: TextBoxProps) {
+function TextBox({ placeholder, cssProps = "textBox", onChange, onEnterDown }: TextBoxProps) {
   const [inputValue, setInputValue] = useState("");
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -19,6 +20,12 @@ function TextBox({ placeholder, cssProps = "textBox", onChange }: TextBoxProps) 
     }
   };
 
+  const handleUserPromptOnKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (event.key === "Enter") {
+      onEnterDown && onEnterDown();
+    }
+  };
+
   useEffect(() => {
     if (textAreaRef.current) {
       textAreaRef.current.style.height = "auto"; // Reset the height to auto
@@ -26,7 +33,16 @@ function TextBox({ placeholder, cssProps = "textBox", onChange }: TextBoxProps) 
     }
   }, [inputValue]);
 
-  return <textarea ref={textAreaRef} className={`textArea ${cssProps}`} placeholder={placeholder} value={inputValue} onChange={handleChange} />;
+  return (
+    <textarea
+      ref={textAreaRef}
+      className={`textArea ${cssProps}`}
+      placeholder={placeholder}
+      value={inputValue}
+      onChange={handleChange}
+      onKeyDown={handleUserPromptOnKeyDown}
+    />
+  );
 }
 
 export default TextBox;
