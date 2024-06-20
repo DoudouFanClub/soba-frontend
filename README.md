@@ -11,8 +11,11 @@ Include all new functionality in the `src/components` folder, creating a `*.tsx`
 - Vite
 - React
 - React Router
+- React Portal
+- React Markdown
 - Node.js
 - Axios (net/http)
+- Remark-gfm (Markdown for Links, Footers, Strikethrough, Tables, Tasklists)
 
 ## Application Controls
 

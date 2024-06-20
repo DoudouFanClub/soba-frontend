@@ -1,6 +1,10 @@
 import axios from "axios";
 
-export const NewChatRequest = async (username: string, title: string): Promise<string> => {
+export interface ApiCreateNewChatProps {
+  response: string;
+}
+
+export const NewChatRequest = async (username: string, title: string): Promise<ApiCreateNewChatProps> => {
   console.log("Sending POST New Chat Request");
   try {
     const response = await axios.post(
@@ -20,7 +24,10 @@ export const NewChatRequest = async (username: string, title: string): Promise<s
     return response.data;
   } catch (error) {
     console.error("Error:", error);
-    return "failure";
+    var serverResponse: ApiCreateNewChatProps = {
+      response: "error",
+    };
+    return serverResponse;
   }
 };
 

@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./TextArea.css";
 
-interface TextBoxProps {
+interface TextAreaProps {
   placeholder?: string;
   cssProps?: string;
   onChange?: (value: string) => void;
   onEnterDown?: () => void;
 }
 
-function TextBox({ placeholder, cssProps = "textBox", onChange, onEnterDown }: TextBoxProps) {
+export function TextArea({ placeholder, cssProps = "textBox", onChange, onEnterDown }: TextAreaProps) {
   const [inputValue, setInputValue] = useState("");
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -44,5 +44,3 @@ function TextBox({ placeholder, cssProps = "textBox", onChange, onEnterDown }: T
     />
   );
 }
-
-export default TextBox;

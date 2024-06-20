@@ -1,4 +1,7 @@
+import { marked } from "marked";
 import "./TextBlock.css";
+
+import "highlight.js/styles/vs2015.min.css";
 
 interface TextBlockProps {
   text: string;
@@ -10,8 +13,9 @@ export const TextBlock = ({ text, side }: TextBlockProps) => {
     <div className={"textBlock " + side}>
       {side === "left" && (
         <div>
-          <p style={{ fontStyle: "italic", fontWeight: "bold" }}>Local LLM </p>
-          <p>{text}</p>
+          <div className="markdown-preview">
+            <div dangerouslySetInnerHTML={{ __html: marked(text) }} />
+          </div>
         </div>
       )}
       {side === "right" && <p>{text}</p>}

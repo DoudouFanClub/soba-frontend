@@ -2,8 +2,10 @@ import { TextareaHTMLAttributes, useEffect, useRef, useState } from "react";
 import LabelButton from "./../components/LabelButton";
 import { NewChatPortalView } from "../views/NewChatView";
 import { useLocation, useNavigate } from "react-router-dom";
+import { Tokens, marked } from "marked";
+import hljs from "highlight.js";
 
-import TextArea from "../components/TextArea";
+import { TextArea } from "../components/TextArea";
 import { Scrollbar } from "../components/Scrollbar";
 import { TextContainer } from "../components/TextContainer";
 import { ApiMessage, ApiStringArrayResponse, LoadChatRequest, RetrieveConversationTitlesRequest, HandleSendMessage } from "../api/ServerActionApi";
@@ -35,6 +37,25 @@ export const ConversationView = () => {
     console.log("Username: ", username);
     console.log("Title updated:", titles);
   }, [title]);
+
+  // Used to initialize Renderer to parse
+  useEffect(() => {
+    const renderer = new marked.Renderer();
+
+    renderer.code = ({ text, lang, escaped }: Tokens.Code) => {
+      if (lang) {
+        const validLanguage = hljs.getLanguage(lang) ? lang : "plaintext";
+        const highlighted = hljs.highlight(validLanguage, text).value;
+        return `<pre class="markdown-preview"><code class="hljs ${validLanguage}">${highlighted}</code></pre>`;
+      }
+      return "";
+    };
+
+    marked.setOptions({
+      renderer,
+      breaks: true, // Enables GitHub flavored markdown line breaks
+    });
+  }, []);
 
   // Toggle portal visibility
   const [visible, isVisible] = useState(false);

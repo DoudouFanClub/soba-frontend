@@ -12,6 +12,7 @@
   transition: background-color 0.5s;
   position: relative;
   transform: translate(-50%);
+  text-align: left;
   left: 50%;
   width: 90%;
   outline: none;
@@ -29,6 +30,7 @@
   transition: background-color 0.5s;
   position: relative;
   transform: translate(-50%);
+  text-align: left;
   left: 50%;
   width: 90%;
   display: flex;

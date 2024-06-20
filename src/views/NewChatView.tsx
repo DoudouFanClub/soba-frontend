@@ -5,7 +5,7 @@ import LabelButton from "../components/LabelButton";
 import "./NewChatView.css";
 import TextBox from "../components/TextBox";
 import DropdownBox from "../components/Dropdown";
-import { NewChatRequest } from "../api/UserActionApi";
+import { NewChatRequest, ApiCreateNewChatProps } from "../api/UserActionApi";
 
 interface PortalWindowProp {
   username: string;
@@ -27,9 +27,9 @@ export function NewChatPortalView({ username, handleClosePortal, handleOnNewChat
       return;
     }
 
-    var created: string = await NewChatRequest(username, title);
+    var created: ApiCreateNewChatProps = await NewChatRequest(username, title);
 
-    switch (created) {
+    switch (created.response) {
       case "success": {
         handleClosePortal();
         handleOnNewChatCreated(username, title);
