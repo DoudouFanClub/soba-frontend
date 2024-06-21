@@ -31,13 +31,14 @@ export const LoginRequest = async (username: string, password: string, convo: st
   }
 };
 
-export const LogoutRequest = async (username: string) => {
+export const LogoutRequest = async (username: string, title: string) => {
   console.log("Sending POST Logout Request");
   try {
     const response = await axios.post(
       "http://localhost:8080/logout",
       {
         username: username,
+        title: title,
       },
       {
         headers: {

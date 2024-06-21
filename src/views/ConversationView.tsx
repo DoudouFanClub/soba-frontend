@@ -8,7 +8,14 @@ import hljs from "highlight.js";
 import { TextArea } from "../components/TextArea";
 import { Scrollbar } from "../components/Scrollbar";
 import { TextContainer } from "../components/TextContainer";
-import { ApiMessage, ApiStringArrayResponse, LoadChatRequest, RetrieveConversationTitlesRequest, HandleSendMessage } from "../api/ServerActionApi";
+import {
+  ApiMessage,
+  ApiStringArrayResponse,
+  LoadChatRequest,
+  RetrieveConversationTitlesRequest,
+  HandleSendMessage,
+  ApiLoadChatResponse,
+} from "../api/ServerActionApi";
 
 import "./ConversationView.css";
 
@@ -18,6 +25,7 @@ export const ConversationView = () => {
   const [title, setTitle] = useState("");
   const [model, setModel] = useState("");
   const [prompt, setPrompt] = useState("");
+  const [textAreaLock, setTextAreaLock] = useState(false);
 
   const [titles, setTitles] = useState<string[]>();
   const [messages, setMessages] = useState<ApiMessage[]>([]);
@@ -79,20 +87,20 @@ export const ConversationView = () => {
   }, [messages]);
 
   const handleTopicSelcted = (username: string, titleName: string) => {
-    console.log("Selected a conversation:", titleName);
-    console.log(`Name: ${username},  title: ${titleName}`);
     const handleRetrieveMessages = async () => {
-      const reply = await LoadChatRequest(username, titleName);
-      console.log("chicken nugget: ", reply.Messages.length > 0 && reply.Messages[0].Content);
-      setMessages(reply.Messages);
+      const reply: ApiLoadChatResponse = await LoadChatRequest(username, titleName);
+      console.log("chicken nugget: ", reply.response.Messages.length > 0 && reply.response.Messages[0].Content);
+      setMessages(reply.response.Messages);
     };
 
     setTitle(titleName);
     handleRetrieveMessages();
   };
 
-  const onUserEnterInTextArea = () => {
-    HandleSendMessage(prompt, messages);
+  const onUserEnterInTextArea = async () => {
+    setTextAreaLock(true);
+    await HandleSendMessage(username, title, prompt, messages)();
+    setTextAreaLock(false);
   };
 
   return (
@@ -100,7 +108,7 @@ export const ConversationView = () => {
       <div className="leftViewLayout">
         <div className="leftOptionsLayout">
           <LabelButton label="Create Conversation" onClick={handleCreateConversionClick} />
-          <LabelButton label="Logout" onClick={() => navgiate("/logout")} />
+          <LabelButton label="Logout" onClick={() => navgiate("/logout", { state: { username: `${username}`, title: `${title}` } })} />
         </div>
 
         {titles && <Scrollbar placeholder="Loading Titles..." username={username} values={titles} onSelect={handleTopicSelcted} />}
@@ -114,8 +122,14 @@ export const ConversationView = () => {
         {visible && <NewChatPortalView username={username} handleClosePortal={handleOnClick} handleOnNewChatCreated={handleTopicSelcted} />}
 
         <div className="conversationUserPromptLayout">
-          <TextArea cssProps="conversationTextBox" onChange={(value) => setPrompt(value)} placeholder="Ask anything..." onEnterDown={onUserEnterInTextArea} />
-          <LabelButton cssProps="conversationSendButton" label="Send" onClick={() => HandleSendMessage(prompt, messages)} />
+          <TextArea
+            cssProps="conversationTextBox"
+            onChange={(value) => setPrompt(value)}
+            placeholder="Ask anything..."
+            onEnterDown={onUserEnterInTextArea}
+            isLocked={textAreaLock}
+          />
+          <LabelButton cssProps="conversationSendButton" label="Send" onClick={onUserEnterInTextArea} />
         </div>
       </div>
     </div>

@@ -13,12 +13,24 @@ export interface ApiMessage {
   Content: string;
 }
 
-export interface ApiMessageArrayResponse {
+export interface CompleteApiMessagePrompt {
+  Username: string;
+  Title: string;
+  Contents: ApiMessage[];
+}
+
+/**
+ * Used For Loading of Chats in the Conversation View
+ */
+export interface MessageArrayData {
   Title: string;
   Messages: ApiMessage[];
 }
+export interface ApiLoadChatResponse {
+  response: MessageArrayData;
+}
 
-export const LoadChatRequest = async (username: string, title: string): Promise<ApiMessageArrayResponse> => {
+export const LoadChatRequest = async (username: string, title: string): Promise<ApiLoadChatResponse> => {
   console.log("Sending GET Chat Request");
   try {
     const response = await axios.post(
@@ -41,32 +53,49 @@ export const LoadChatRequest = async (username: string, title: string): Promise<
   } catch (error) {
     console.error("Error:", error);
 
-    const errorMsg: ApiMessageArrayResponse = {
-      Title: "",
+    const falseMsg: MessageArrayData = {
+      Title: "error",
       Messages: [],
+    };
+    const errorMsg: ApiLoadChatResponse = {
+      response: falseMsg,
     };
     return errorMsg;
   }
 };
 
-export const HandleSendMessage = (msg: string, msges: ApiMessage[]) => {
+export const HandleSendMessage = (username: string, title: string, msg: string, msges: ApiMessage[]) => {
   const handleClick = async () => {
     try {
       const userMsg: ApiMessage = {
         Role: "user",
         Content: msg,
       };
-      console.log("uh oh jeremy fked up");
+
       msges.push(userMsg);
       // check for original length
       const origLength = msges.length;
+
+      var JsonBodyToSend: CompleteApiMessagePrompt = {
+        Username: username,
+        Title: title,
+        Contents: msges,
+      };
+
+      console.log(JSON.stringify(JsonBodyToSend));
+
       const response = await fetch("http://localhost:8080/send_message", {
         method: "POST",
-        body: JSON.stringify(msg),
+        body: JSON.stringify(JsonBodyToSend), // change this to pack as a different json method
         headers: {
           "Content-type": "application/json",
         },
       });
+
+      if (!response.ok) {
+        console.log("Unable to fetch from backend");
+        return;
+      }
 
       // create the stream for the decoder to read from
       const reader = response.body?.getReader();

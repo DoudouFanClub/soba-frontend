@@ -5,12 +5,18 @@ interface TextAreaProps {
   placeholder?: string;
   cssProps?: string;
   onChange?: (value: string) => void;
-  onEnterDown?: () => void;
+  onEnterDown: () => void;
+  isLocked?: boolean;
 }
 
-export function TextArea({ placeholder, cssProps = "textBox", onChange, onEnterDown }: TextAreaProps) {
+export function TextArea({ placeholder, cssProps = "textBox", onChange, onEnterDown, isLocked = false }: TextAreaProps) {
   const [inputValue, setInputValue] = useState("");
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    console.log("meow");
+    setInputValue("");
+  }, [isLocked]);
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newValue = event.target.value;
@@ -22,7 +28,8 @@ export function TextArea({ placeholder, cssProps = "textBox", onChange, onEnterD
 
   const handleUserPromptOnKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === "Enter") {
-      onEnterDown && onEnterDown();
+      onEnterDown();
+      setInputValue("");
     }
   };
 
@@ -40,6 +47,7 @@ export function TextArea({ placeholder, cssProps = "textBox", onChange, onEnterD
       placeholder={placeholder}
       value={inputValue}
       onChange={handleChange}
+      readOnly={isLocked}
       onKeyDown={handleUserPromptOnKeyDown}
     />
   );

@@ -1,47 +1,25 @@
 // src/App.tsx
 import { useState } from "react";
-//import { Routes, Route, useNavigate } from "react-router-dom"; // note that we can use useNavigate to toggle between different views
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import { HomeView } from "./views/HomeView";
-//import { NewChatView } from "./views/NewChatView";
-import { UserLoginView } from "./views/UserLoginView";
 import { UserLogoutView } from "./views/UserLogoutView";
-import { UserRegisterView } from "./views/UserRegisterView";
 import { ConversationView } from "./views/ConversationView";
 
 import "./App.css";
 
-/*
-  Needed Views:
-  - Login Page
-  - Registration Page
-  - Conversation Page
-    - Conversation Scroll Bar (Display all chats)
-    - User Query Section (Main chat)
-  - New Chat Page
-*/
+/* Copy Paste This into DB to test Markdown Syntax
+To create a Python function that adds two numbers, you can define a function using the `def` keyword and then return the sum of the two numbers. Here's a simple example:
+```python
+def add_two_numbers(a, b):
+    # My Comment
+    return a + b
 
-/*
-  Needed Components:
-  - Enter Button
-    - Label (LabelButton.tsx)
-    - Icon (Not done yet)
-  - Chat Box (TextBox.tsx)
-  - New Chat Button (Not Component, but a view)
-    - Select LLM Model (Potentially) - Popup + Dropdown to Select
-  - Dropdown box (Dropdown.tsx)
-  - Main Conversation Page
-  - Text Bubble / Block
-  - Individual Conversation Chats (Probably repurpose Label Button)
-  - Conversation Options (Menu Button)
-    - Delete
-    - Rename
-*/
-
-/*
-  To Do:
-  - Create generic *.css file for "createConversationHiddenOverlay" and "createConversationPanel" (Place them in App.css)
+# Example usage
+result = add_two_numbers(3, 5)
+print(result)
+# Output: 8
+```
 */
 
 function App() {

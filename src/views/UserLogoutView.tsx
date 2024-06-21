@@ -2,7 +2,8 @@ import { useState } from "react";
 
 import TextBox from "./../components/TextBox";
 import LabelButton from "./../components/LabelButton";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { LogoutRequest } from "../api/ServerAccessApi";
 
 interface SetUsernameCallback {
   setUsernameCallback: (username: string) => void;
@@ -10,11 +11,11 @@ interface SetUsernameCallback {
 
 export const UserLogoutView = ({ setUsernameCallback }: SetUsernameCallback) => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { username, title } = location.state;
 
-  const [title, setTitle] = useState("");
-  const [model, setModel] = useState("");
-
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await LogoutRequest(username, title);
     setUsernameCallback("logout");
     navigate("/");
   };
@@ -28,7 +29,6 @@ export const UserLogoutView = ({ setUsernameCallback }: SetUsernameCallback) => 
   return (
     <div>
       <h1>Logout</h1>
-      <TextBox placeholder="Title" onChange={(value) => setTitle(value)} />
       <LabelButton label="Back to login" onClick={handleLogout} />
     </div>
   );
