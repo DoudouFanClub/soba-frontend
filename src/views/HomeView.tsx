@@ -1,42 +1,28 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import LabelButton from "./../components/LabelButton";
 import { UserLoginView } from "./UserLoginView";
 import { UserRegisterView } from "./UserRegisterView";
+import LabelButton from "./../components/LabelButton";
 
-interface usernameCallbackProp {
-  setUsernameCallback: (username: string) => void;
-}
+export const HomeView = () => {
+  // State for toggling Login portal visibility
+  const [loginVisible, setLoginVisible] = useState(false);
 
-export const HomeView = ({ setUsernameCallback }: usernameCallbackProp) => {
-  // Toggle Login portal visibility
-  const [loginVisible, isLoginVisible] = useState(false);
-  const handleDisableLogin = () => {
-    isLoginVisible(false);
-  };
-
-  const handleEnableLogin = () => {
-    isLoginVisible(true);
-  };
-
-  // Toggle Register portal visibility
+  // State for toggling Register portal visibility
   const [registerVisible, setRegisterVisible] = useState(false);
-  const handleDisableRegister = () => {
-    setRegisterVisible(false);
-  };
-
-  const handleEnableRegister = () => {
-    setRegisterVisible(true);
-  };
 
   return (
     <div>
       <h1>Local LLM</h1>
-      {loginVisible && <UserLoginView setDisableView={handleDisableLogin} />}
-      <LabelButton label="Login" onClick={handleEnableLogin} />
 
-      {registerVisible && <UserRegisterView setDisableView={handleDisableRegister} />}
-      <LabelButton label="Register" onClick={handleEnableRegister} />
+      {/* Conditional rendering of UserLoginView */}
+      {loginVisible && <UserLoginView setDisableView={() => setLoginVisible(false)} />}
+      {/* Button to enable Login view */}
+      <LabelButton label="Login" onClick={() => setLoginVisible(true)} />
+
+      {/* Conditional rendering of UserRegisterView */}
+      {registerVisible && <UserRegisterView setDisableView={() => setRegisterVisible(false)} />}
+      {/* Button to enable Register view */}
+      <LabelButton label="Register" onClick={() => setRegisterVisible(true)} />
     </div>
   );
 };

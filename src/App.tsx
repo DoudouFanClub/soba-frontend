@@ -1,5 +1,4 @@
 // src/App.tsx
-import { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import { HomeView } from "./views/HomeView";
@@ -22,31 +21,19 @@ print(result)
 ```
 */
 
+/*
+  We need to add functioanlity such that when we toggle between chats, we still send the current title in to save the current chat
+*/
+
 function App() {
-  const [username, setUsername] = useState("");
-
-  const updateUsername = (userName: string) => {
-    setUsername(userName);
-    console.log(username);
-  };
-
   // Change the views tomorrow
   return (
     <BrowserRouter>
       <div>
         <Routes>
-          <Route path="/" element={<HomeView setUsernameCallback={updateUsername} />} />
-          {/* <Route
-            path="/login"
-            element={<UserLoginView setUsernameCallback={updateUsername} />}
-          /> */}
-          {/* <Route path="/register" element={<UserRegisterView />} /> */}
+          <Route path="/" element={<HomeView />} />
           <Route path="/conversations" element={<ConversationView />} />
-          {/* <Route
-            path="/new_chat"
-            element={<NewChatView username={username} />}
-          /> */}
-          <Route path="/logout" element={<UserLogoutView setUsernameCallback={updateUsername} />} />
+          <Route path="/logout" element={<UserLogoutView />} />
         </Routes>
       </div>
     </BrowserRouter>

@@ -1,6 +1,6 @@
+import React, { useState } from "react";
 import ReactDOM from "react-dom";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { NavigateFunction, useNavigate } from "react-router-dom";
 
 import TextBox from "./../components/TextBox";
 import LabelButton from "./../components/LabelButton";
@@ -8,50 +8,55 @@ import { ApiResponse, LoginRequest } from "../api/ServerAccessApi";
 
 import "./UserLoginView.css";
 
-interface usernameCallbackProp {
+// Define the props interface for the portal window
+interface UsernameCallbackProps {
   setDisableView: () => void;
 }
 
-export const UserLoginView = ({ setDisableView }: usernameCallbackProp) => {
-  const navigate = useNavigate();
+// Handle login button click
+const handleOnClickLogin = async (username: string, password: string, navigate: NavigateFunction) => {
+  try {
+    const reply: ApiResponse = await LoginRequest(username, password);
+    switch (reply.response) {
+      case "success":
+        navigate("/conversations", { state: { username } });
+        break;
+      case "failure":
+        alert("Failed To Login: Wrong Password!");
+        break;
+      case "invalid":
+        alert("Failed To Login: User Does Not Exist!");
+        break;
+      default:
+        console.error("Unhandled response:", reply);
+    }
+  } catch (error) {
+    console.error("Error during login:", error);
+  }
+};
 
+// Handle click inside the portal (prevent backward propagation)
+const disableBackwardPropagation = (e: React.MouseEvent<HTMLDivElement>) => {
+  e.stopPropagation();
+};
+
+export const UserLoginView = ({ setDisableView }: UsernameCallbackProps) => {
+  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
-  const handleOnClickLogin = async () => {
-    const reply: ApiResponse = await LoginRequest(username, password);
-
-    switch (reply.response) {
-      case "success": {
-        navigate("/conversations", { state: { username: `${username}` } });
-        break;
-      }
-      case "failure": {
-        alert("Failed To Login, Wrong Password!");
-        break;
-      }
-      case "invalid": {
-        alert("Failed To Login, User Does Not Exist!");
-      }
-    }
-  };
-
-  // To prevent clicks on the View within the Login page
-  // to navigate back to the Home View
-  const portalOnClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.stopPropagation();
-  };
 
   return ReactDOM.createPortal(
     <>
       <div className="createConversationHiddenOverlay" onClick={setDisableView}>
-        <div className="createConversationPanel" onClick={portalOnClick}>
+        <div className="createConversationPanel" onClick={disableBackwardPropagation}>
           <h1 className="headerTitle">Login</h1>
 
+          {/* Input fields for username and password */}
           <TextBox placeholder="Username" cssProps="usernameTextBoxStyle" onChange={(value) => setUsername(value)} />
           <TextBox placeholder="Password" cssProps="passwordTextBoxStyle" onChange={(value) => setPassword(value)} />
 
-          <LabelButton label="Login" onClick={handleOnClickLogin} cssProps="loginButton" />
+          {/* Login button */}
+          <LabelButton label="Login" onClick={() => handleOnClickLogin(username, password, navigate)} cssProps="loginButton" />
         </div>
       </div>
     </>,

@@ -1,62 +1,82 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import LabelButton from "../components/LabelButton";
-
-import "./NewChatView.css";
 import TextBox from "../components/TextBox";
 import DropdownBox from "../components/Dropdown";
 import { NewChatRequest, ApiCreateNewChatProps } from "../api/UserActionApi";
 
-interface PortalWindowProp {
+import "./NewChatView.css";
+
+// Define the props interface for the portal window
+interface PortalWindowProps {
   username: string;
   handleClosePortal: () => void;
   handleOnNewChatCreated: (username: string, titleName: string) => void;
 }
 
-export function NewChatPortalView({ username, handleClosePortal, handleOnNewChatCreated }: PortalWindowProp) {
+// Handle click inside the portal (prevent backward propagation)
+const disableBackwardPropagation = (e: React.MouseEvent<HTMLDivElement>) => {
+  e.stopPropagation();
+};
+
+// Create the NewChatPortalView component
+export function NewChatPortalView({ username, handleClosePortal, handleOnNewChatCreated }: PortalWindowProps) {
+  // State variables for title and model
   const [title, setTitle] = useState("");
   const [model, setModel] = useState("");
 
-  const portalOnClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.stopPropagation();
-  };
-
+  // Function to create a new conversation
   const handleCreateNewConversation = async (username: string, title: string, model: string) => {
     if (title.length > 50) {
-      alert("Title has exceeded 50 characters! Current Length: " + title.length.toString());
+      // Alert if title exceeds 50 characters
+      alert(`Title has exceeded 50 characters! Current Length: ${title.length}`);
       return;
     }
 
-    var created: ApiCreateNewChatProps = await NewChatRequest(username, title);
-
-    switch (created.response) {
-      case "success": {
-        handleClosePortal();
-        handleOnNewChatCreated(username, title);
-        break;
+    try {
+      // Make an API request to create a new chat
+      const created: ApiCreateNewChatProps = await NewChatRequest(username, title);
+      switch (created.response) {
+        case "success":
+          // Close the portal and notify about the new chat
+          handleClosePortal();
+          handleOnNewChatCreated(username, title);
+          break;
+        case "failure":
+          alert("Title is currently in use!");
+          break;
+        default:
+          // Log unhandled errors
+          alert(`Unhandled error when creating New Chat, backend response: ${created}`);
       }
-      case "failure": {
-        alert("Title is currently in use!");
-        break;
-      }
-      default: {
-        alert(`Unhandled error when creating New Chat, backend response: ${created}`);
-      }
+    } catch (error) {
+      // Log any other errors
+      console.error("Error creating new chat:", error);
     }
   };
 
+  // Render the portal
   return ReactDOM.createPortal(
     <>
+      {/* Grey background around the New Conversation Panel */}
       <div className="createConversationHiddenOverlay" onClick={handleClosePortal}>
-        <div className="createConversationPanel" onClick={portalOnClick}>
+        {/* Actual New Conversation Panel - We disable clicking within the Panel to disable */}
+        {/* the Conversation Panel */}
+        <div className="createConversationPanel" onClick={disableBackwardPropagation}>
           <h1 className="headerTitle">Create a New Chat</h1>
+
+          {/* Input field for the chat title */}
           <TextBox placeholder="Title" onChange={setTitle} cssProps="titleTextBoxStyle" />
+
+          {/* Dropdown for selecting the chat model */}
           <DropdownBox
             placeholder="Boulder Planet"
             options={["Boulder Planet", "Boulder Movement", "BFF", "Boulder Plus"]}
             handleModelSelect={setModel}
             cssProps="modelDropdownBoxStyle"
           />
+
+          {/* Button to confirm and create the chat */}
           <LabelButton label="Confirm" onClick={() => handleCreateNewConversation(username, title, model)} cssProps="confirmButtonStyle" />
         </div>
       </div>

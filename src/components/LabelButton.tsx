@@ -1,4 +1,3 @@
-import React from "react";
 import "./LabelButton.css";
 // import defaultStyle from "./LabelButton.css";
 

@@ -4,7 +4,7 @@ import { TextBlock } from "./TextBlock";
 import "./TextContainer.css";
 
 interface TextContainerProps {
-  conversation: ApiMessage[]; // originally str
+  conversation: ApiMessage[];
 }
 
 export const TextContainer = ({ conversation }: TextContainerProps) => {
