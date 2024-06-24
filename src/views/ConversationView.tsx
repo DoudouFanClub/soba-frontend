@@ -136,7 +136,9 @@ export const ConversationView = () => {
         </div>
 
         {/* New chat portal view */}
-        {visible && <NewChatPortalView username={username} handleClosePortal={handleOnClick} handleOnNewChatCreated={handleTopicSelected} />}
+        {visible && (
+          <NewChatPortalView username={username} handleClosePortal={handleOnClick} handleOnNewChatCreated={handleTopicSelected} />
+        )}
 
         <div className="conversationUserPromptLayout">
           {/* Text area for user input, also allows for "Enter" to send the message */}
@@ -148,7 +150,7 @@ export const ConversationView = () => {
             isLocked={textAreaLock}
           />
           {/* Button to send the message */}
-          <LabelButton cssProps="conversationSendButton" label="Send" onClick={onUserEnterInTextArea} />
+          <LabelButton cssProps="conversationSendButton" label="Send" onClick={onUserEnterInTextArea} disabled={textAreaLock} />
         </div>
       </div>
     </div>

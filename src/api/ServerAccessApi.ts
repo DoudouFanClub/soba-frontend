@@ -1,25 +1,23 @@
-import axios from "axios";
+import { ApiResponse, makeSimplePostRequest } from "./HelperApi";
 
-export interface ApiResponse {
-  response: string;
-}
-
+/**
+ * Handles the Login Request using REST API to communicate with
+ * the Backend Server
+ * @param username
+ * @param password
+ * @param convo
+ * @returns
+ */
 export const LoginRequest = async (username: string, password: string, convo: string[] = []): Promise<ApiResponse> => {
   console.log("Sending POST Login Request");
+
   try {
-    const response = await axios.post(
-      "http://localhost:8080/login",
-      {
-        username: username,
-        password: password,
-        conversations: convo,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await makeSimplePostRequest("http://localhost:8080/login", {
+      username: username,
+      password: password,
+      conversations: convo,
+    });
+
     return response.data;
   } catch (error) {
     console.error("Error:", error);
@@ -31,21 +29,21 @@ export const LoginRequest = async (username: string, password: string, convo: st
   }
 };
 
+/**
+ * Handles the Logout Request using REST API to communicate with
+ * the Backend Server
+ * Prompts the Backend Server to Save the current chat
+ * @param username
+ * @param title
+ */
 export const LogoutRequest = async (username: string, title: string) => {
   console.log("Sending POST Logout Request");
   try {
-    const response = await axios.post(
-      "http://localhost:8080/logout",
-      {
-        username: username,
-        title: title,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await makeSimplePostRequest("http://localhost:8080/logout", {
+      username: username,
+      title: title,
+    });
+    console.log(response.data);
 
     // Double check if successfully logout
     // Change view to login page
@@ -54,33 +52,25 @@ export const LogoutRequest = async (username: string, title: string) => {
   }
 };
 
+/**
+ * Handles the Registration Request using REST API to communicate with
+ * the Backend Server
+ * Prompts the Backend Server to save the User's Details
+ * @param username
+ * @param password
+ * @param convo
+ * @returns
+ */
 export const RegisterRequest = async (username: string, password: string, convo: string[] = []): Promise<ApiResponse> => {
   console.log("Sending POST Register Request");
-
-  // Include a check here prior to publishing to see whether both passwords match
-  // Display wrong password message here
-  // Check before sending request (??) ===============================!@!@!@!@!@
-
   try {
-    const response = await axios.post(
-      "http://localhost:8080/register",
-      {
-        username: username,
-        password: password,
-        conversations: convo,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    console.log(response);
-    return response.data;
+    const response = await makeSimplePostRequest("http://localhost:8080/register", {
+      username: username,
+      password: password,
+      conversations: convo,
+    });
 
-    // Check Response Data
-    // Success: Change to conversation page
-    // Failed: Display if username exist
+    return response.data;
   } catch (error) {
     console.error("Error:", error);
 

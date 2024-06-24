@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
+
 import LabelButton from "../components/LabelButton";
 import TextBox from "../components/TextBox";
 import DropdownBox from "../components/Dropdown";
-import { NewChatRequest, ApiCreateNewChatProps } from "../api/UserActionApi";
+import { ApiResponse } from "../api/HelperApi";
+import { NewChatRequest } from "../api/UserActionApi";
 
 import "./NewChatView.css";
 
@@ -35,7 +37,7 @@ export function NewChatPortalView({ username, handleClosePortal, handleOnNewChat
 
     try {
       // Make an API request to create a new chat
-      const created: ApiCreateNewChatProps = await NewChatRequest(username, title);
+      const created: ApiResponse = await NewChatRequest(username, title);
       switch (created.response) {
         case "success":
           // Close the portal and notify about the new chat

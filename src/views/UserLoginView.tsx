@@ -4,7 +4,8 @@ import { NavigateFunction, useNavigate } from "react-router-dom";
 
 import TextBox from "./../components/TextBox";
 import LabelButton from "./../components/LabelButton";
-import { ApiResponse, LoginRequest } from "../api/ServerAccessApi";
+import { LoginRequest } from "../api/ServerAccessApi";
+import { ApiResponse } from "../api/HelperApi";
 
 import "./UserLoginView.css";
 

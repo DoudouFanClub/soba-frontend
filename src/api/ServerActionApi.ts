@@ -30,6 +30,14 @@ export interface ApiLoadChatResponse {
   response: MessageArrayData;
 }
 
+/**
+ * Handles the LoadChat Request using REST API to communicate with
+ * the Backend Server
+ * Prompts the Backend Server to retrieve the Chat History
+ * @param username
+ * @param title
+ * @returns
+ */
 export const LoadChatRequest = async (username: string, title: string): Promise<ApiLoadChatResponse> => {
   console.log("Sending GET Chat Request");
   try {
@@ -64,6 +72,17 @@ export const LoadChatRequest = async (username: string, title: string): Promise<
   }
 };
 
+/**
+ * Handles the SendMessage Request using REST API to communicate with
+ * the Backend Server
+ * Sends to the Backend Server the User's Prompt to forward to the LLM Model
+ * and awaits for the LLM response
+ * @param username
+ * @param title
+ * @param msg
+ * @param msges
+ * @returns
+ */
 export const HandleSendMessage = (username: string, title: string, msg: string, msges: ApiMessage[]) => {
   const handleClick = async () => {
     try {
@@ -139,6 +158,13 @@ export const HandleSendMessage = (username: string, title: string, msg: string, 
   return handleClick;
 };
 
+/**
+ * Handles the Retrieve Conversation Request using REST API to communicate with
+ * the Backend Server
+ * Prompts the Backend Server to retrieve the Conversation Titles associated with Username
+ * @param username
+ * @returns
+ */
 export const RetrieveConversationTitlesRequest = async (username: string): Promise<ApiStringArrayResponse> => {
   console.log("Attempting to Retrieve Conversation Titles");
   try {

@@ -1,12 +1,17 @@
 import React, { useState } from "react";
 import "./TextBox.css";
 
+// Component Props
 interface TextBoxProps {
+  // Placeholder Text
   placeholder?: string;
+  // Custom className
   cssProps?: string;
+  // Callback Function for when TextBox Value changes
   onChange?: (value: string) => void;
 }
 
+// TextBox Component - Used for Single Line Input
 function TextBox({ placeholder, cssProps = "text-box", onChange }: TextBoxProps) {
   const [inputValue, setInputValue] = useState("");
 
@@ -19,7 +24,7 @@ function TextBox({ placeholder, cssProps = "text-box", onChange }: TextBoxProps)
     }
   };
 
-  // Return a JSX
+  // Return a TextBox
   return <input type="text" className={cssProps} placeholder={placeholder} value={inputValue} onChange={handleChange} />;
 }
 
