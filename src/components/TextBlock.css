@@ -12,6 +12,7 @@
   padding-right: 15px;
   max-width: 100%;
   background-color: #44444434;
+  width: fit-content;
 }
 
 .textBlock.right {

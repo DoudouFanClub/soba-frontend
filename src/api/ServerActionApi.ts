@@ -1,4 +1,8 @@
 import axios from "axios";
+import Worker from "../worker/LoadConversationWorker.ts?worker";
+import { useEffect } from "react";
+
+import useChatStream from "@magicul/react-chat-stream";
 
 export interface ApiResponse {
   response: string;
@@ -29,6 +33,8 @@ export interface MessageArrayData {
 export interface ApiLoadChatResponse {
   response: MessageArrayData;
 }
+
+//const worker = new Worker();
 
 /**
  * Handles the LoadChat Request using REST API to communicate with
@@ -72,6 +78,29 @@ export const LoadChatRequest = async (username: string, title: string): Promise<
   }
 };
 
+export async function* decodeStreamToJson(data: ReadableStream<Uint8Array> | null): AsyncIterableIterator<string> {
+  if (!data) return;
+
+  const reader = data.getReader();
+  const decoder = new TextDecoder();
+
+  while (true) {
+    const { value, done } = await reader.read();
+    if (done) {
+      console.log("Done in decode stream to json");
+      break;
+    }
+
+    if (value) {
+      try {
+        yield decoder.decode(value);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }
+}
+
 /**
  * Handles the SendMessage Request using REST API to communicate with
  * the Backend Server
@@ -83,6 +112,7 @@ export const LoadChatRequest = async (username: string, title: string): Promise<
  * @param msges
  * @returns
  */
+
 export const HandleSendMessage = (username: string, title: string, msg: string, msges: ApiMessage[]) => {
   const handleClick = async () => {
     try {
@@ -90,6 +120,8 @@ export const HandleSendMessage = (username: string, title: string, msg: string, 
         Role: "user",
         Content: msg,
       };
+
+      console.log("USER MSG", msg);
 
       msges.push(userMsg);
       // check for original length
@@ -101,7 +133,13 @@ export const HandleSendMessage = (username: string, title: string, msg: string, 
         Contents: msges,
       };
 
-      console.log(JSON.stringify(JsonBodyToSend));
+      // const apiMessage: ApiMessage = {
+      //   Role: "assistant",
+      //   Content: "",
+      // };
+      // msges.push(apiMessage);
+
+      //console.log(JSON.stringify(JsonBodyToSend));
 
       const response = await fetch("http://localhost:8080/send_message", {
         method: "POST",
@@ -116,39 +154,28 @@ export const HandleSendMessage = (username: string, title: string, msg: string, 
         return;
       }
 
-      // create the stream for the decoder to read from
-      const reader = response.body?.getReader();
-      const stream = new ReadableStream({
-        async pull(controller) {
-          const result = await reader?.read();
-          if (result?.done) {
-            controller.close();
-            return;
-          }
-          controller.enqueue(result?.value);
-        },
-      });
+      // const worker = new Worker();
 
-      // consume the stream to invoke the callback to set the message
-      const decoder = new TextDecoder();
-      const streamReader = stream.getReader();
-      let result;
-      while ((result = await streamReader.read()) !== undefined) {
-        if (result.done) break;
-        // if no new message appended yet, append
+      console.log("Before chunk");
+      for await (const chunk of decodeStreamToJson(response.body)) {
+        // console.log("Chunk: ", chunk);
         if (msges.length == origLength) {
           const apiMessage: ApiMessage = {
             Role: "assistant",
             Content: "",
           };
+
           msges.push(apiMessage);
-          msges[origLength].Content += decoder.decode(result.value);
+          // const workerData = { userMessages: msges[origLength].Content, result: chunk };
+          // worker.postMessage(workerData);
+          msges[origLength].Content += chunk;
+        } else {
+          msges[origLength].Content += chunk;
         }
-        // else add on to the contents of the current message being generated
-        else {
-          msges[origLength].Content += decoder.decode(result.value);
-        }
+
+        // worker.terminate();
       }
+      console.log("After chunk");
     } catch (error) {
       console.error("Error:", error);
       return;

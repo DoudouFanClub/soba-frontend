@@ -23,6 +23,7 @@ export const TextBlock = ({ text, side }: TextBlockProps) => {
       {side === "left" && (
         <div>
           <div className="markdown-preview">
+            <p style={{ fontWeight: "bold" }}>LLM Response: </p>
             <div dangerouslySetInnerHTML={{ __html: marked(text) }} />
           </div>
         </div>

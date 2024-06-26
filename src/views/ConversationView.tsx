@@ -111,6 +111,8 @@ export const ConversationView = () => {
     // the function, making use of arrays being passed by reference in TS
     // We may want to consider finding a way to update messages to trigger
     // handleAutoScrollToBottom
+
+    //messages.push();
     await HandleSendMessage(username, title, prompt, messages)();
     setTextAreaLock(false);
   };
@@ -136,9 +138,7 @@ export const ConversationView = () => {
         </div>
 
         {/* New chat portal view */}
-        {visible && (
-          <NewChatPortalView username={username} handleClosePortal={handleOnClick} handleOnNewChatCreated={handleTopicSelected} />
-        )}
+        {visible && <NewChatPortalView username={username} handleClosePortal={handleOnClick} handleOnNewChatCreated={handleTopicSelected} />}
 
         <div className="conversationUserPromptLayout">
           {/* Text area for user input, also allows for "Enter" to send the message */}
