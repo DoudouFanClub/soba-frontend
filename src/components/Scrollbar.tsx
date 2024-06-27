@@ -9,14 +9,16 @@ interface ScrollbarProps {
   placeholder: string;
   // Username of Logged In User - For Handle On Select
   username: string;
+  activeTitle: string;
   // List of Values displayed as LabelButtons
   values: string[];
+  disabled: boolean;
   // Callback that triggers on LabelButton click
   onSelect: (username: string, title: string) => void;
 }
 
 // Scrollbar Component
-export const Scrollbar = ({ placeholder, username, values, onSelect }: ScrollbarProps) => {
+export const Scrollbar = ({ placeholder, username, activeTitle, values, disabled, onSelect }: ScrollbarProps) => {
   const [activeButton, setActiveButton] = useState("");
 
   // Handle the onClick event when a LabelButton is clicked
@@ -39,7 +41,8 @@ export const Scrollbar = ({ placeholder, username, values, onSelect }: Scrollbar
             key={index}
             label={titleName}
             onClick={() => handleOnClick(username, titleName)}
-            cssProps={`${titleName}` === `${activeButton}` ? "conversationTopicButtonsClicked" : "conversationTopicButtons"}
+            cssProps={`${titleName}` === `${activeTitle}` ? "conversationTopicButtonsClicked" : "conversationTopicButtons"}
+            disabled={disabled}
           />
         ))
       ) : (

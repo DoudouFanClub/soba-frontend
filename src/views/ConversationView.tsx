@@ -93,27 +93,45 @@ export const ConversationView = () => {
     setVisible(true);
   };
 
+  const updateTitleView = () => {
+    if (!titles) return;
+    var titleIndex: number = -1;
+    for (var i = 0; i < titles.length; ++i) {
+      if (titles[i] === title) {
+        titleIndex = i;
+      }
+    }
+    if (titleIndex === -1) return;
+
+    var newarray = [...titles];
+    const [removedElement] = newarray.splice(titleIndex, 1);
+    newarray.unshift(removedElement);
+    setTitles(newarray);
+  };
+
   // Handle selecting a conversation topic
   const handleTopicSelected = (username: string, titleName: string) => {
     const fetchMessages = async () => {
-      const reply: ApiLoadChatResponse = await LoadChatRequest(username, titleName);
-      setMessages(reply.response.Messages);
+      const reply: ApiLoadChatResponse = await LoadChatRequest(username, titleName, title);
+      console.log(titleName);
+      setMessages(reply.response.messages);
     };
 
-    setTitle(titleName);
     fetchMessages();
+    setTitle(titleName);
   };
 
   // Handle user input in the text area and send a message
   const onUserEnterInTextArea = async () => {
     setTextAreaLock(true);
+    updateTitleView();
     // Currently we update messages by inserting prompt AFTER entering
     // the function, making use of arrays being passed by reference in TS
     // We may want to consider finding a way to update messages to trigger
     // handleAutoScrollToBottom
 
     //messages.push();
-    await HandleSendMessage(username, title, prompt, messages)();
+    await HandleSendMessage(username, title, prompt, messages, setMessages)();
     setTextAreaLock(false);
   };
 
@@ -122,13 +140,22 @@ export const ConversationView = () => {
       <div className="leftViewLayout">
         <div className="leftOptionsLayout">
           {/* Button to create a new conversation */}
-          <LabelButton label="Create Conversation" onClick={handleCreateConversationClick} />
+          <LabelButton label="Create Conversation" onClick={handleCreateConversationClick} disabled={textAreaLock} />
           {/* Button to logout */}
-          <LabelButton label="Logout" onClick={() => navigate("/logout", { state: { username, title } })} />
+          <LabelButton label="Logout" disabled={textAreaLock} onClick={() => navigate("/logout", { state: { username, title } })} />
         </div>
 
         {/* Scrollbar to display conversation titles */}
-        {titles && <Scrollbar placeholder="Loading Titles..." username={username} values={titles} onSelect={handleTopicSelected} />}
+        {titles && (
+          <Scrollbar
+            placeholder="Loading Titles..."
+            username={username}
+            values={titles}
+            activeTitle={title}
+            disabled={textAreaLock}
+            onSelect={handleTopicSelected}
+          />
+        )}
       </div>
       <div className="rightViewLayout">
         <div className="conversationTextBlockLayout" ref={scrollRef}>
@@ -138,7 +165,7 @@ export const ConversationView = () => {
         </div>
 
         {/* New chat portal view */}
-        {visible && <NewChatPortalView username={username} handleClosePortal={handleOnClick} handleOnNewChatCreated={handleTopicSelected} />}
+        {visible && <NewChatPortalView username={username} currTitle={title} handleClosePortal={handleOnClick} handleOnNewChatCreated={handleTopicSelected} />}
 
         <div className="conversationUserPromptLayout">
           {/* Text area for user input, also allows for "Enter" to send the message */}

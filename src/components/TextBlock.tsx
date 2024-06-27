@@ -2,6 +2,7 @@ import { marked } from "marked";
 
 import "./TextBlock.css";
 import "highlight.js/styles/vs2015.min.css";
+import { useEffect } from "react";
 
 // Component Props
 interface TextBlockProps {
@@ -14,6 +15,8 @@ interface TextBlockProps {
 // TextBlock Component - Displayed within ConversationView
 // Supports Markdown Format & Highlighting of Languages
 export const TextBlock = ({ text, side }: TextBlockProps) => {
+  useEffect(() => {}, [text]);
+
   return (
     <div className={"textBlock " + side}>
       {/*

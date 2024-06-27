@@ -13,8 +13,14 @@ export interface ApiStringArrayResponse {
 }
 
 export interface ApiMessage {
-  Role: string;
-  Content: string;
+  role: string;
+  content: string;
+}
+
+export interface UserApiMessagePrompt {
+  Username: string;
+  Title: string;
+  Contents: ApiMessage;
 }
 
 export interface CompleteApiMessagePrompt {
@@ -27,8 +33,8 @@ export interface CompleteApiMessagePrompt {
  * Used For Loading of Chats in the Conversation View
  */
 export interface MessageArrayData {
-  Title: string;
-  Messages: ApiMessage[];
+  title: string;
+  messages: ApiMessage[];
 }
 export interface ApiLoadChatResponse {
   response: MessageArrayData;
@@ -44,14 +50,16 @@ export interface ApiLoadChatResponse {
  * @param title
  * @returns
  */
-export const LoadChatRequest = async (username: string, title: string): Promise<ApiLoadChatResponse> => {
+export const LoadChatRequest = async (username: string, title: string, prevTitle: string): Promise<ApiLoadChatResponse> => {
   console.log("Sending GET Chat Request");
+  console.log(prevTitle);
   try {
     const response = await axios.post(
       "http://localhost:8080/load_chat",
       {
         username: username,
         title: title,
+        prevtitle: prevTitle,
       },
       {
         headers: {
@@ -68,8 +76,8 @@ export const LoadChatRequest = async (username: string, title: string): Promise<
     console.error("Error:", error);
 
     const falseMsg: MessageArrayData = {
-      Title: "error",
-      Messages: [],
+      title: "error",
+      messages: [],
     };
     const errorMsg: ApiLoadChatResponse = {
       response: falseMsg,
@@ -112,34 +120,32 @@ export async function* decodeStreamToJson(data: ReadableStream<Uint8Array> | nul
  * @param msges
  * @returns
  */
-
-export const HandleSendMessage = (username: string, title: string, msg: string, msges: ApiMessage[]) => {
+type hookMsgCallback = React.Dispatch<React.SetStateAction<ApiMessage[]>>;
+export const HandleSendMessage = (username: string, title: string, msg: string, msges: ApiMessage[], setMsgCallback: hookMsgCallback) => {
   const handleClick = async () => {
     try {
       const userMsg: ApiMessage = {
-        Role: "user",
-        Content: msg,
+        role: "user",
+        content: msg,
       };
 
       console.log("USER MSG", msg);
 
       msges.push(userMsg);
       // check for original length
-      const origLength = msges.length;
 
-      var JsonBodyToSend: CompleteApiMessagePrompt = {
+      var JsonBodyToSend: UserApiMessagePrompt = {
         Username: username,
         Title: title,
-        Contents: msges,
+        Contents: userMsg,
       };
 
-      // const apiMessage: ApiMessage = {
-      //   Role: "assistant",
-      //   Content: "",
-      // };
-      // msges.push(apiMessage);
+      const apiMessage: ApiMessage = {
+        role: "assistant",
+        content: "",
+      };
 
-      //console.log(JSON.stringify(JsonBodyToSend));
+      msges.push(apiMessage);
 
       const response = await fetch("http://localhost:8080/send_message", {
         method: "POST",
@@ -154,28 +160,15 @@ export const HandleSendMessage = (username: string, title: string, msg: string, 
         return;
       }
 
-      // const worker = new Worker();
-
-      console.log("Before chunk");
       for await (const chunk of decodeStreamToJson(response.body)) {
-        // console.log("Chunk: ", chunk);
-        if (msges.length == origLength) {
-          const apiMessage: ApiMessage = {
-            Role: "assistant",
-            Content: "",
-          };
+        console.log("Chunk: ", chunk);
 
-          msges.push(apiMessage);
-          // const workerData = { userMessages: msges[origLength].Content, result: chunk };
-          // worker.postMessage(workerData);
-          msges[origLength].Content += chunk;
-        } else {
-          msges[origLength].Content += chunk;
-        }
-
-        // worker.terminate();
+        setMsgCallback((msges) => {
+          const lastMessageContents = msges[msges.length - 1];
+          return [...msges.slice(0, -1), { ...lastMessageContents, content: lastMessageContents.content + chunk }];
+        });
+        msges[msges.length - 1].content += chunk;
       }
-      console.log("After chunk");
     } catch (error) {
       console.error("Error:", error);
       return;

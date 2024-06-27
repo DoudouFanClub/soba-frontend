@@ -12,6 +12,7 @@ import "./NewChatView.css";
 // Define the props interface for the portal window
 interface PortalWindowProps {
   username: string;
+  currTitle: string;
   handleClosePortal: () => void;
   handleOnNewChatCreated: (username: string, titleName: string) => void;
 }
@@ -22,7 +23,7 @@ const disableBackwardPropagation = (e: React.MouseEvent<HTMLDivElement>) => {
 };
 
 // Create the NewChatPortalView component
-export function NewChatPortalView({ username, handleClosePortal, handleOnNewChatCreated }: PortalWindowProps) {
+export function NewChatPortalView({ username, currTitle, handleClosePortal, handleOnNewChatCreated }: PortalWindowProps) {
   // State variables for title and model
   const [title, setTitle] = useState("");
   const [model, setModel] = useState("");
@@ -37,7 +38,7 @@ export function NewChatPortalView({ username, handleClosePortal, handleOnNewChat
 
     try {
       // Make an API request to create a new chat
-      const created: ApiResponse = await NewChatRequest(username, title);
+      const created: ApiResponse = await NewChatRequest(username, title, currTitle);
       switch (created.response) {
         case "success":
           // Close the portal and notify about the new chat
@@ -70,13 +71,13 @@ export function NewChatPortalView({ username, handleClosePortal, handleOnNewChat
           {/* Input field for the chat title */}
           <TextBox placeholder="Title" onChange={setTitle} cssProps="titleTextBoxStyle" />
 
-          {/* Dropdown for selecting the chat model */}
+          {/* Dropdown for selecting the chat model
           <DropdownBox
             placeholder="Boulder Planet"
             options={["Boulder Planet", "Boulder Movement", "BFF", "Boulder Plus"]}
             handleModelSelect={setModel}
             cssProps="modelDropdownBoxStyle"
-          />
+          /> */}
 
           {/* Button to confirm and create the chat */}
           <LabelButton label="Confirm" onClick={() => handleCreateNewConversation(username, title, model)} cssProps="confirmButtonStyle" />

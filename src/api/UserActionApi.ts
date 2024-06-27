@@ -9,10 +9,10 @@ import { ApiResponse, makeSimplePostRequest } from "./HelperApi";
  * @param title
  * @returns
  */
-export const NewChatRequest = async (username: string, title: string): Promise<ApiResponse> => {
+export const NewChatRequest = async (username: string, title: string, currTitle: string): Promise<ApiResponse> => {
   console.log("Sending POST New Chat Request");
   try {
-    const response = await makeSimplePostRequest("http://localhost:8080/new_chat", { username: username, title: title });
+    const response = await makeSimplePostRequest("http://localhost:8080/new_chat", { username: username, title: title, prevtitle: currTitle });
 
     return response.data;
   } catch (error) {

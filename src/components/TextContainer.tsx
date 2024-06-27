@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { ApiMessage } from "../api/ServerActionApi";
 import { TextBlock } from "./TextBlock";
 
@@ -20,7 +21,7 @@ export const TextContainer = ({ conversation }: TextContainerProps) => {
         on their Index
       */}
       {conversation.map((text, index) => (
-        <TextBlock key={index} text={text.Content} side={index % 2 === 1 ? "left" : "right"} />
+        <TextBlock key={index} text={text.content} side={index % 2 === 1 ? "left" : "right"} />
       ))}
     </div>
   );
