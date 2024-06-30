@@ -65,20 +65,17 @@ export function NewChatPortalView({ username, currTitle, handleClosePortal, hand
       <div className="createConversationHiddenOverlay" onClick={handleClosePortal}>
         {/* Actual New Conversation Panel - We disable clicking within the Panel to disable */}
         {/* the Conversation Panel */}
-        <div className="createConversationPanel" onClick={disableBackwardPropagation}>
-          <h1 className="headerTitle">Create a New Chat</h1>
-
+        <div className="createConversationOpaquePanel" onClick={disableBackwardPropagation}>
+          <h1 className="createConversationHeaderTitle">New Chat</h1>
           {/* Input field for the chat title */}
-          <TextBox placeholder="Title" onChange={setTitle} cssProps="titleTextBoxStyle" />
-
-          {/* Dropdown for selecting the chat model
+          <TextBox type="text" placeholder="Title" onChange={setTitle} cssProps="titleTextBoxStyle" />
+          {/* Dropdown for selecting the chat model */}
           <DropdownBox
-            placeholder="Boulder Planet"
-            options={["Boulder Planet", "Boulder Movement", "BFF", "Boulder Plus"]}
+            placeholder="phi3:mini"
+            options={["phi3:mini", "phi3:medium"]}
             handleModelSelect={setModel}
             cssProps="modelDropdownBoxStyle"
-          /> */}
-
+          />
           {/* Button to confirm and create the chat */}
           <LabelButton label="Confirm" onClick={() => handleCreateNewConversation(username, title, model)} cssProps="confirmButtonStyle" />
         </div>

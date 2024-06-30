@@ -1,0 +1,26 @@
+.home-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+}
+
+.title-header-body {
+  color: azure;
+  position: absolute;
+  left: 60px;
+}
+
+.buttons-body {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+.button-props {
+  width: 120px;
+}

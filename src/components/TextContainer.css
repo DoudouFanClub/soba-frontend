@@ -1,6 +1,7 @@
 .textContainer {
   width: 40%;
   min-width: 700px;
+  max-width: 700px;
   position: relative;
   left: 50%;
   transform: translate(-50%);

@@ -158,26 +158,39 @@ export const ConversationView = () => {
         )}
       </div>
       <div className="rightViewLayout">
-        <div className="conversationTextBlockLayout" ref={scrollRef}>
-          <h1>Conversation Page</h1>
-          {/* Container to display conversation messages */}
-          {messages && <TextContainer conversation={messages} />}
-        </div>
+        {!visible && (
+          <div className="conversationTextBlockLayout" ref={scrollRef}>
+            <h1 className="conversationPageHeader">Conversation Page</h1>
+            {/* Container to display conversation messages */}
+            {messages && <TextContainer conversation={messages} />}
+          </div>
+        )}
 
         {/* New chat portal view */}
-        {visible && <NewChatPortalView username={username} currTitle={title} handleClosePortal={handleOnClick} handleOnNewChatCreated={handleTopicSelected} />}
+        {visible && (
+          <NewChatPortalView
+            username={username}
+            currTitle={title}
+            handleClosePortal={handleOnClick}
+            handleOnNewChatCreated={handleTopicSelected}
+          />
+        )}
 
         <div className="conversationUserPromptLayout">
           {/* Text area for user input, also allows for "Enter" to send the message */}
-          <TextArea
-            cssProps="conversationTextBox"
-            onChange={(value) => setPrompt(value)}
-            placeholder="Ask anything..."
-            onEnterDown={onUserEnterInTextArea}
-            isLocked={textAreaLock}
-          />
+          {!visible && title != "" && (
+            <TextArea
+              cssProps="conversationTextBox"
+              onChange={(value) => setPrompt(value)}
+              placeholder="Ask anything..."
+              onEnterDown={onUserEnterInTextArea}
+              isLocked={textAreaLock}
+            />
+          )}
           {/* Button to send the message */}
-          <LabelButton cssProps="conversationSendButton" label="Send" onClick={onUserEnterInTextArea} disabled={textAreaLock} />
+          {!visible && title != "" && (
+            <LabelButton cssProps="conversationSendButton" label="Send" onClick={onUserEnterInTextArea} disabled={textAreaLock} />
+          )}
         </div>
       </div>
     </div>

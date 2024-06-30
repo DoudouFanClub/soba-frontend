@@ -10,8 +10,8 @@
   text-align: left;
   padding-left: 15px;
   padding-right: 15px;
-  max-width: 100%;
-  background-color: #44444434;
+  max-width: 87%;
+  background-color: rgba(68, 68, 68, 0.7);
   width: fit-content;
 }
 
@@ -21,6 +21,7 @@
   margin-left: auto;
   padding-right: 15px;
   padding-left: 15px;
+  background-color: rgba(68, 68, 68, 0.6);
 }
 
 .markdown-textarea-container {

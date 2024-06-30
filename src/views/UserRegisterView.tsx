@@ -4,7 +4,8 @@ import { NavigateFunction, useNavigate } from "react-router-dom";
 
 import TextBox from "./../components/TextBox";
 import LabelButton from "./../components/LabelButton";
-import { ApiResponse, RegisterRequest } from "../api/ServerAccessApi";
+import { ApiResponse } from "./../api/HelperApi";
+import { RegisterRequest } from "../api/ServerAccessApi";
 
 import "./UserRegisterView.css";
 
@@ -59,13 +60,18 @@ export const UserRegisterView = ({ setDisableView }: changeViewProps) => {
 
   return ReactDOM.createPortal(
     <div className="registerHiddenOverlay" onClick={setDisableView}>
-      <div className="createConversationPanel" onClick={disableBackwardPropagation}>
-        <h1 className="registerTextHeaderStyle">Register Account</h1>
+      <div className="registerMainPanel" onClick={disableBackwardPropagation}>
+        <h1 className="registerTextHeaderStyle">Register</h1>
 
         {/* Input fields for username, password, and confirm password */}
-        <TextBox placeholder="Username" cssProps="usernameTextBoxStyle" onChange={(value) => setUsername(value)} />
-        <TextBox placeholder="Password" cssProps="passwordTextBoxStyle" onChange={(value) => setPassword(value)} />
-        <TextBox placeholder="Confirm Password" cssProps="confirmPasswordTextBoxStyle" onChange={(value) => setConfirmPassword(value)} />
+        <TextBox type="text" placeholder="Username" cssProps="registerUsernameTextBoxStyle" onChange={(value) => setUsername(value)} />
+        <TextBox type="password" placeholder="Password" cssProps="registerPasswordTextBoxStyle" onChange={(value) => setPassword(value)} />
+        <TextBox
+          type="password"
+          placeholder="Confirm Password"
+          cssProps="registerConfirmPasswordTextBoxStyle"
+          onChange={(value) => setConfirmPassword(value)}
+        />
 
         {/* Register button */}
         <LabelButton

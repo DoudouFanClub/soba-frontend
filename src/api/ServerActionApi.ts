@@ -1,8 +1,4 @@
 import axios from "axios";
-import Worker from "../worker/LoadConversationWorker.ts?worker";
-import { useEffect } from "react";
-
-import useChatStream from "@magicul/react-chat-stream";
 
 export interface ApiResponse {
   response: string;

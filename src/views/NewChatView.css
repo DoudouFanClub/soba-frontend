@@ -1,9 +1,9 @@
-.headerTitle {
+.createConversationHeaderTitle {
   position: absolute;
   width: 100%;
   color: rgb(255, 255, 255);
-  top: 10%;
   left: 50%;
+  top: 5%;
   text-align: center;
   transform: translate(-50%, -50%);
 }
@@ -21,47 +21,64 @@
   left: 0;
 }
 
-.createConversationPanel {
+.createConversationOpaquePanel {
+  padding: 2rem;
+  border-radius: 8px;
+  background-color: rgba(143, 141, 141, 0.2);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  width: 320px;
+  height: 250px;
   position: relative;
-  background-color: grey;
-  z-index: 1001;
-  width: 500px;
-  height: 600px;
-  top: 0;
-  left: 0;
+  text-align: center;
 }
 
 .titleTextBoxStyle {
+  color: rgb(204, 202, 199);
+  background-color: rgba(119, 115, 115, 0.2);
+  border: 2px solid #4f4c4c;
+  border-radius: 30px;
   position: absolute;
   transform: translate(-50%, -50%);
-  top: 40%;
+  top: 38%;
   left: 50%;
   width: 80%;
-  height: 7%;
-  padding: 0px 0px 0px 0px;
-  padding-left: 5px;
-  border: 0px;
+  height: 50px;
+  padding: 0px 0px 0px 15px;
   box-sizing: border-box;
 }
 
+.titleTextBoxStyle::placeholder {
+  color: rgb(204, 202, 199);
+}
+
+.titleTextBoxStyle:focus {
+  outline: none;
+}
+
 .modelDropdownBoxStyle {
+  background-color: rgba(119, 115, 115, 0.2);
+  border: 2px solid #4f4c4c;
+  border-radius: 30px;
+  color: rgb(204, 202, 199);
   position: absolute;
   transform: translate(-50%, -50%);
-  top: 50%;
+  top: 61%;
   left: 50%;
   width: 80%;
-  height: 7%;
+  height: 50px;
   margin: 0;
-  padding: 0px 0px;
-  border: 0;
+  padding: 0px 15px;
+}
+
+.modelDropdownBoxStyle:focus {
+  outline: none;
 }
 
 .confirmButtonStyle {
-  background-color: #1ab63c;
   position: absolute;
-  top: 70%;
+  top: 81%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 300px;
-  height: 40px;
+  width: 100px;
+  height: 50px;
 }

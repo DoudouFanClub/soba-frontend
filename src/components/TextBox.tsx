@@ -3,6 +3,7 @@ import "./TextBox.css";
 
 // Component Props
 interface TextBoxProps {
+  type: string;
   // Placeholder Text
   placeholder?: string;
   // Custom className
@@ -12,7 +13,7 @@ interface TextBoxProps {
 }
 
 // TextBox Component - Used for Single Line Input
-function TextBox({ placeholder, cssProps = "text-box", onChange }: TextBoxProps) {
+function TextBox({ type = "text", placeholder, cssProps = "text-box", onChange }: TextBoxProps) {
   const [inputValue, setInputValue] = useState("");
 
   // On Change, Update Value in TextBoxProps
@@ -25,7 +26,7 @@ function TextBox({ placeholder, cssProps = "text-box", onChange }: TextBoxProps)
   };
 
   // Return a TextBox
-  return <input type="text" className={cssProps} placeholder={placeholder} value={inputValue} onChange={handleChange} />;
+  return <input type={type} className={cssProps} placeholder={placeholder} value={inputValue} onChange={handleChange} />;
 }
 
 export default TextBox;

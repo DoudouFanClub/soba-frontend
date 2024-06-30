@@ -48,13 +48,13 @@ export const UserLoginView = ({ setDisableView }: UsernameCallbackProps) => {
 
   return ReactDOM.createPortal(
     <>
-      <div className="createConversationHiddenOverlay" onClick={setDisableView}>
-        <div className="createConversationPanel" onClick={disableBackwardPropagation}>
-          <h1 className="headerTitle">Login</h1>
+      <div className="loginHiddenOverlay" onClick={setDisableView}>
+        <div className="loginMainPanel" onClick={disableBackwardPropagation}>
+          <h1 className="loginHeaderTitle">Login</h1>
 
           {/* Input fields for username and password */}
-          <TextBox placeholder="Username" cssProps="usernameTextBoxStyle" onChange={(value) => setUsername(value)} />
-          <TextBox placeholder="Password" cssProps="passwordTextBoxStyle" onChange={(value) => setPassword(value)} />
+          <TextBox type="text" placeholder="Username" cssProps="usernameTextBoxStyle" onChange={(value) => setUsername(value)} />
+          <TextBox type="password" placeholder="Password" cssProps="passwordTextBoxStyle" onChange={(value) => setPassword(value)} />
 
           {/* Login button */}
           <LabelButton label="Login" onClick={() => handleOnClickLogin(username, password, navigate)} cssProps="loginButton" />
