@@ -20,6 +20,7 @@ import {
 
 import "./ConversationView.css";
 import { DeleteChatRequest, RenameChatRequest } from "../api/UserActionApi";
+import { ApiResponse } from "../api/HelperApi";
 
 // Initialize Markdown.js
 const handleInitializeRenderer = () => {
@@ -43,7 +44,7 @@ const handleInitializeRenderer = () => {
 };
 
 // Fetch conversation titles for user
-const handleFetchConversationTitles = (username: string, title: string, titles: string[] | undefined, setTitles: (titles: string[]) => void) => {
+const handleFetchConversationTitles = (username: string, title: string, setTitles: (titles: string[]) => void) => {
   useEffect(() => {
     const fetchTitles = async () => {
       const reply: ApiStringArrayResponse = await RetrieveConversationTitlesRequest(username);
@@ -51,7 +52,7 @@ const handleFetchConversationTitles = (username: string, title: string, titles: 
     };
 
     fetchTitles();
-  }, [username, title, titles, setTitles]);
+  }, [username, title, setTitles]);
 };
 
 // Automatically scroll to the bottom of the container when dependencies change
@@ -81,7 +82,7 @@ export const ConversationView = () => {
 
   // Initialize renderer and fetch conversation titles on mount
   handleInitializeRenderer();
-  handleFetchConversationTitles(username, title, titles, setTitles);
+  handleFetchConversationTitles(username, title, setTitles);
   handleAutoScrollToBottom(scrollRef, messages); // Auto-scroll to bottom on messages change
 
   // Handle closing the new chat portal
@@ -107,7 +108,7 @@ export const ConversationView = () => {
     var newarray = [...titles];
     const [removedElement] = newarray.splice(titleIndex, 1);
     newarray.unshift(removedElement);
-    setTitles(newarray);
+    //setTitles(newarray);
   };
 
   // Handle selecting a conversation topic
@@ -138,22 +139,29 @@ export const ConversationView = () => {
 
   const HandleDeleteConversation = async () => {
     const reply: ApiStringArrayResponse = await RetrieveConversationTitlesRequest(username);
-    var newarray = [...reply.response];
-    setTitles(newarray);
+    //var newarray = [...reply.response];
+    setTitles(reply.response);
+
+    reply.response.forEach((element) => {
+      console.log("New List: {0}", element);
+    });
   };
 
-  const HandleOnHamburgerButtonClick = (command: string, commandTitle: string) => {
+  const HandleOnHamburgerButtonClick = async (command: string, commandTitle: string) => {
     switch (command) {
       case "Delete Chat": {
-        console.log(command, " ", title);
+        console.log("Delete chat command:", command, " ", commandTitle);
 
         if (commandTitle == title) {
           setTitle("");
         }
 
-        DeleteChatRequest(username, commandTitle);
-
-        HandleDeleteConversation();
+        const response: ApiResponse = await DeleteChatRequest(username, commandTitle);
+        if (response.response == "success") {
+          HandleDeleteConversation();
+        } else {
+          console.log("Backend says not ok...");
+        }
         break;
       }
 

@@ -58,16 +58,21 @@ export const RenameChatRequest = async (username: string, currTitle: string, new
  * @param username
  * @param title
  */
-export const DeleteChatRequest = async (username: string, title: string) => {
+export const DeleteChatRequest = async (username: string, title: string): Promise<ApiResponse> => {
   console.log("Sending POST Delete Chat Request");
   try {
     const response = await makeSimplePostRequest("http://localhost:8080/delete_chat", { username: username, title: title });
     console.log(response);
+    return response.data;
 
     // Success: Check if deleted chat is currently loaded - Change to clean view
     //          Else - Just update Chat Display section
     // Fail: See if cannot find convo to remove
   } catch (error) {
     console.error("Error:", error);
+    var serverResponse: ApiResponse = {
+      response: "error",
+    };
+    return serverResponse;
   }
 };
