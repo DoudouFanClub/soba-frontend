@@ -58,8 +58,7 @@
   box-sizing: border-box;
   font-size: 16px;
   margin: 0 30px 30px 30px;
-  padding: 10px;
-  padding: 0px, 0px, 0px, 30px;
+  padding: 10px 20px 10px 20px;
   word-wrap: break-word;
   overflow-wrap: break-word;
   overflow-y: auto;

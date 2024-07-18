@@ -1,0 +1,9 @@
+.popup-overlay {
+  position: absolute;
+  z-index: 1000; /* Ensure the popup is above other elements */
+  background-color: blue;
+}
+
+.popup-content {
+  border: 1px solid black;
+}

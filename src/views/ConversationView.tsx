@@ -19,6 +19,7 @@ import {
 } from "../api/ServerActionApi";
 
 import "./ConversationView.css";
+import { DeleteChatRequest, RenameChatRequest } from "../api/UserActionApi";
 
 // Initialize Markdown.js
 const handleInitializeRenderer = () => {
@@ -42,7 +43,7 @@ const handleInitializeRenderer = () => {
 };
 
 // Fetch conversation titles for user
-const handleFetchConversationTitles = (username: string, title: string, setTitles: (titles: string[]) => void) => {
+const handleFetchConversationTitles = (username: string, title: string, titles: string[] | undefined, setTitles: (titles: string[]) => void) => {
   useEffect(() => {
     const fetchTitles = async () => {
       const reply: ApiStringArrayResponse = await RetrieveConversationTitlesRequest(username);
@@ -50,7 +51,7 @@ const handleFetchConversationTitles = (username: string, title: string, setTitle
     };
 
     fetchTitles();
-  }, [username, title, setTitles]);
+  }, [username, title, titles, setTitles]);
 };
 
 // Automatically scroll to the bottom of the container when dependencies change
@@ -80,7 +81,7 @@ export const ConversationView = () => {
 
   // Initialize renderer and fetch conversation titles on mount
   handleInitializeRenderer();
-  handleFetchConversationTitles(username, title, setTitles);
+  handleFetchConversationTitles(username, title, titles, setTitles);
   handleAutoScrollToBottom(scrollRef, messages); // Auto-scroll to bottom on messages change
 
   // Handle closing the new chat portal
@@ -135,6 +136,36 @@ export const ConversationView = () => {
     setTextAreaLock(false);
   };
 
+  const HandleDeleteConversation = async () => {
+    const reply: ApiStringArrayResponse = await RetrieveConversationTitlesRequest(username);
+    var newarray = [...reply.response];
+    setTitles(newarray);
+  };
+
+  const HandleOnHamburgerButtonClick = (command: string, commandTitle: string) => {
+    switch (command) {
+      case "Delete Chat": {
+        console.log(command, " ", title);
+
+        if (commandTitle == title) {
+          setTitle("");
+        }
+
+        DeleteChatRequest(username, commandTitle);
+
+        HandleDeleteConversation();
+        break;
+      }
+
+      case "Rename Chat": {
+        RenameChatRequest(username, title, "TOBERECEIVED");
+        break;
+      }
+    }
+    console.log(command);
+    console.log(title);
+  };
+
   return (
     <div className="overviewPageLayout">
       <div className="leftViewLayout">
@@ -154,6 +185,7 @@ export const ConversationView = () => {
             activeTitle={title}
             disabled={textAreaLock}
             onSelect={handleTopicSelected}
+            OnHamburgerButtonClick={HandleOnHamburgerButtonClick}
           />
         )}
       </div>
@@ -167,14 +199,7 @@ export const ConversationView = () => {
         )}
 
         {/* New chat portal view */}
-        {visible && (
-          <NewChatPortalView
-            username={username}
-            currTitle={title}
-            handleClosePortal={handleOnClick}
-            handleOnNewChatCreated={handleTopicSelected}
-          />
-        )}
+        {visible && <NewChatPortalView username={username} currTitle={title} handleClosePortal={handleOnClick} handleOnNewChatCreated={handleTopicSelected} />}
 
         <div className="conversationUserPromptLayout">
           {/* Text area for user input, also allows for "Enter" to send the message */}
@@ -188,9 +213,7 @@ export const ConversationView = () => {
             />
           )}
           {/* Button to send the message */}
-          {!visible && title != "" && (
-            <LabelButton cssProps="conversationSendButton" label="Send" onClick={onUserEnterInTextArea} disabled={textAreaLock} />
-          )}
+          {!visible && title != "" && <LabelButton cssProps="conversationSendButton" label="Send" onClick={onUserEnterInTextArea} disabled={textAreaLock} />}
         </div>
       </div>
     </div>

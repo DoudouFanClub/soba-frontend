@@ -4,6 +4,7 @@ import { UserRegisterView } from "./UserRegisterView";
 import LabelButton from "./../components/LabelButton";
 
 import "./HomeView.css";
+import { MenuButton } from "../components/MenuButton";
 
 export const HomeView = () => {
   // State for toggling Login portal visibility
@@ -11,6 +12,22 @@ export const HomeView = () => {
 
   // State for toggling Register portal visibility
   const [registerVisible, setRegisterVisible] = useState(false);
+
+  // TO DELETE =====
+  const HandleButtonClick = (value: string) => {
+    switch (value) {
+      case "Delete Chat": {
+        // toggle portal
+        // call api
+        break;
+      }
+      case "Rename Chat": {
+        // toggle portal
+        // call api
+        break;
+      }
+    }
+  };
 
   return (
     <div className="home-body">
@@ -24,9 +41,7 @@ export const HomeView = () => {
         {/* Conditional rendering of UserRegisterView */}
         {registerVisible && <UserRegisterView setDisableView={() => setRegisterVisible(false)} />}
         {/* Button to enable Register view */}
-        {!loginVisible && !registerVisible && (
-          <LabelButton cssProps="button-props" label="Register" onClick={() => setRegisterVisible(true)} />
-        )}
+        {!loginVisible && !registerVisible && <LabelButton cssProps="button-props" label="Register" onClick={() => setRegisterVisible(true)} />}
       </div>
     </div>
   );

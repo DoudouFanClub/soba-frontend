@@ -2,6 +2,7 @@ import { useState } from "react";
 import LabelButton from "./LabelButton";
 
 import "./Scrollbar.css";
+import { MenuButton } from "./MenuButton";
 
 // Component Props
 interface ScrollbarProps {
@@ -15,10 +16,11 @@ interface ScrollbarProps {
   disabled: boolean;
   // Callback that triggers on LabelButton click
   onSelect: (username: string, title: string) => void;
+  OnHamburgerButtonClick: (command: string, title: string) => void;
 }
 
 // Scrollbar Component
-export const Scrollbar = ({ placeholder, username, activeTitle, values, disabled, onSelect }: ScrollbarProps) => {
+export const Scrollbar = ({ placeholder, username, activeTitle, values, disabled, onSelect, OnHamburgerButtonClick }: ScrollbarProps) => {
   const [activeButton, setActiveButton] = useState("");
 
   // Handle the onClick event when a LabelButton is clicked
@@ -31,23 +33,28 @@ export const Scrollbar = ({ placeholder, username, activeTitle, values, disabled
 
   return (
     <div className="scrollbarStyle">
-      {values ? (
-        /*
+      <div>
+        {values ? (
+          /*
           For all Values within "values", generate a LabelButton 
           and assign a Callback Function to it "onClick"
         */
-        values.map((titleName, index) => (
-          <LabelButton
-            key={index}
-            label={titleName}
-            onClick={() => handleOnClick(username, titleName)}
-            cssProps={`${titleName}` === `${activeTitle}` ? "conversationTopicButtonsClicked" : "conversationTopicButtons"}
-            disabled={disabled}
-          />
-        ))
-      ) : (
-        <p>{placeholder}</p>
-      )}
+          values.map((titleName, index) => (
+            <div className="verticalStyle">
+              <LabelButton
+                key={index}
+                label={titleName}
+                onClick={() => handleOnClick(username, titleName)}
+                cssProps={`${titleName}` === `${activeTitle}` ? "conversationTopicButtonsClicked" : "conversationTopicButtons"}
+                disabled={disabled}
+              />
+              <MenuButton CssProp="menuButtonStyle" ButtonList={["Delete Chat", "test2"]} OnButtonClick={OnHamburgerButtonClick} Title={titleName} />
+            </div>
+          ))
+        ) : (
+          <p>{placeholder}</p>
+        )}
+      </div>
     </div>
   );
 };
