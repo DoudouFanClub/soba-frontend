@@ -3,6 +3,7 @@ import "./MenuButton.css";
 
 import { useState } from "react";
 import LabelButton from "./LabelButton";
+import { IoMenu } from "react-icons/io5";
 
 interface MenuButtonProp {
   ButtonList: string[];
@@ -19,8 +20,9 @@ export const MenuButton = ({ ButtonList, Title, OnButtonClick, CssProp }: MenuBu
   };
 
   return (
-    <div>
+    <div style={{ position: "absolute", left: "236px", border: "none" }}>
       <button onMouseEnter={() => HandleMouseOver(true)} onMouseLeave={() => HandleMouseOver(false)} className={CssProp}>
+        <IoMenu />
         {enableMenu && ButtonList.length > 0 && (
           <div className="popup-overlay">
             {ButtonList.map((command, index) => (

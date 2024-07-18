@@ -1,8 +1,8 @@
 import { useState } from "react";
 import LabelButton from "./LabelButton";
 
-import "./Scrollbar.css";
 import { MenuButton } from "./MenuButton";
+import "./Scrollbar.css";
 
 // Component Props
 interface ScrollbarProps {
@@ -48,7 +48,12 @@ export const Scrollbar = ({ placeholder, username, activeTitle, values, disabled
                 cssProps={`${titleName}` === `${activeTitle}` ? "conversationTopicButtonsClicked" : "conversationTopicButtons"}
                 disabled={disabled}
               />
-              <MenuButton CssProp="menuButtonStyle" ButtonList={["Delete Chat", "test2"]} OnButtonClick={OnHamburgerButtonClick} Title={titleName} />
+              <MenuButton
+                CssProp={`${titleName}` === `${activeTitle}` ? "menuButtonStyleClicked" : "menuButtonStyle"}
+                ButtonList={["Delete Chat", "Rename Chat"]}
+                OnButtonClick={OnHamburgerButtonClick}
+                Title={titleName}
+              />
             </div>
           ))
         ) : (
