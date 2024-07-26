@@ -57,3 +57,7 @@
   padding-right: 4px;
   border-radius: 10px;
 }
+
+.markdown-preview span.hljs-deletion {
+  background-color: transparent;
+}

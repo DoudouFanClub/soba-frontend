@@ -12,7 +12,7 @@ export const LoginRequest = async (username: string, password: string, convo: st
   console.log("Sending POST Login Request");
 
   try {
-    const response = await makeSimplePostRequest("http://localhost:8080/login", {
+    const response = await makeSimplePostRequest("http://192.168.0.1:8080/login", {
       username: username,
       password: password,
       conversations: convo,
@@ -39,7 +39,7 @@ export const LoginRequest = async (username: string, password: string, convo: st
 export const LogoutRequest = async (username: string, title: string) => {
   console.log("Sending POST Logout Request");
   try {
-    const response = await makeSimplePostRequest("http://localhost:8080/logout", {
+    const response = await makeSimplePostRequest("http://192.168.0.1:8080/logout", {
       username: username,
       title: title,
     });
@@ -64,7 +64,7 @@ export const LogoutRequest = async (username: string, title: string) => {
 export const RegisterRequest = async (username: string, password: string, convo: string[] = []): Promise<ApiResponse> => {
   console.log("Sending POST Register Request");
   try {
-    const response = await makeSimplePostRequest("http://localhost:8080/register", {
+    const response = await makeSimplePostRequest("http://192.168.0.1:8080/register", {
       username: username,
       password: password,
       conversations: convo,

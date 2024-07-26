@@ -12,7 +12,7 @@ import { ApiResponse, makeSimplePostRequest } from "./HelperApi";
 export const NewChatRequest = async (username: string, title: string, currTitle: string): Promise<ApiResponse> => {
   console.log("Sending POST New Chat Request");
   try {
-    const response = await makeSimplePostRequest("http://localhost:8080/new_chat", { username: username, title: title, prevtitle: currTitle });
+    const response = await makeSimplePostRequest("http://192.168.0.1:8080/new_chat", { username: username, title: title, prevtitle: currTitle });
 
     return response.data;
   } catch (error) {
@@ -40,7 +40,7 @@ export const RenameChatRequest = async (username: string, currTitle: string, new
   // Check currTitle to make sure we can change (diff Title)
 
   try {
-    const response = await makeSimplePostRequest("http://localhost:8080/rename_chat", { username: username, title: newTitle });
+    const response = await makeSimplePostRequest("http://192.168.0.1:8080/rename_chat", { username: username, title: newTitle });
     console.log(response);
 
     // Success: Re-Apply chat name on Chats View
@@ -61,7 +61,7 @@ export const RenameChatRequest = async (username: string, currTitle: string, new
 export const DeleteChatRequest = async (username: string, title: string): Promise<ApiResponse> => {
   console.log("Sending POST Delete Chat Request");
   try {
-    const response = await makeSimplePostRequest("http://localhost:8080/delete_chat", { username: username, title: title });
+    const response = await makeSimplePostRequest("http://192.168.0.1:8080/delete_chat", { username: username, title: title });
     console.log(response);
     return response.data;
 

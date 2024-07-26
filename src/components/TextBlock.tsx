@@ -1,8 +1,11 @@
-import { marked } from "marked";
+import { marked, options } from "marked";
 
 import "./TextBlock.css";
 import "highlight.js/styles/vs2015.min.css";
 import { useEffect } from "react";
+
+import ReactMarkdown from 'react-markdown'
+import rehypeHighlight from 'rehype-highlight'
 
 // Component Props
 interface TextBlockProps {
@@ -27,7 +30,8 @@ export const TextBlock = ({ text, side }: TextBlockProps) => {
         <div>
           <div className="markdown-preview">
             <p style={{ fontWeight: "bold" }}>LLM Response: </p>
-            <div dangerouslySetInnerHTML={{ __html: marked(text) }} />
+            <ReactMarkdown children={text} rehypePlugins={[[ rehypeHighlight, { detect: true, plainText: ['makefile', 'bash'] } ] ]}></ReactMarkdown>
+            {/* <div dangerouslySetInnerHTML={{ __html: marked(text) }} /> */}
           </div>
         </div>
       )}
