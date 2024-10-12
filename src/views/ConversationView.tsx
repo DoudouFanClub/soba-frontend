@@ -67,7 +67,7 @@ const handleAutoScrollToBottom = (ref: React.RefObject<HTMLDivElement>, dependen
 export const ConversationView = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { username } = location.state; // Retrieve username from location state
+  const { username } = location.state || "Admin"; // Retrieve username from location state
 
   // State variables
   const [title, setTitle] = useState("");

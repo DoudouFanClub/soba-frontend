@@ -13,7 +13,7 @@ function App() {
     <BrowserRouter>
       <div>
         <Routes>
-          <Route path="/" element={<HomeView />} />
+          <Route path="/" element={<ConversationView />} />
           <Route path="/conversations" element={<ConversationView />} />
           <Route path="/logout" element={<UserLogoutView />} />
         </Routes>

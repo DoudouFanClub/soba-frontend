@@ -49,6 +49,17 @@ export interface ApiLoadChatResponse {
 export const LoadChatRequest = async (username: string, title: string, prevTitle: string): Promise<ApiLoadChatResponse> => {
   console.log("Sending GET Chat Request");
   console.log(prevTitle);
+
+  const tempResponse : ApiLoadChatResponse = {
+    response: { title: "Example Title", messages: [
+      {role: "", content: "Asking LLM"},
+      {role: "", content: "LLM Replied"},
+      {role: "", content: "Asking LLM 2"},
+      {role: "", content: "LLM Replied 2"}
+    ] }
+  }
+  return tempResponse
+
   try {
     const response = await axios.post(
       "http://192.168.0.1:8080/load_chat",
@@ -184,6 +195,9 @@ export const HandleSendMessage = (username: string, title: string, msg: string, 
  */
 export const RetrieveConversationTitlesRequest = async (username: string): Promise<ApiStringArrayResponse> => {
   console.log("Attempting to Retrieve Conversation Titles");
+  const tempResponse : ApiStringArrayResponse = {response: ["Test 1", "Test 2"]}
+  return tempResponse
+
   try {
     const response = await axios.post(
       "http://192.168.0.1:8080/retrieve_convo_titles",
