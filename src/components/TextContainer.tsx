@@ -4,6 +4,7 @@ import { TextBlock } from "./TextBlock";
 import { VariableSizeList as List } from 'react-window';
 import AutoSizer from 'react-virtualized-auto-sizer';
 
+
 import "./TextContainer.css";
 
 // Component Props
@@ -17,6 +18,7 @@ interface TextContainerProps {
 export const TextContainer = ({ conversation }: TextContainerProps) => {
   const [itemHeights, setItemHeights] = useState<number[]>(Array(conversation.length).fill(100)); // Default height
   const measuredRefs = useRef<(HTMLDivElement | null)[]>(Array(conversation.length).fill(null));
+  const listRef = useRef<List>(null);
 
   // Function to measure the height of each TextBlock
   const measureHeight = (index: number) => {
@@ -27,19 +29,31 @@ export const TextContainer = ({ conversation }: TextContainerProps) => {
         newHeights[index] = height;
         return newHeights;
       });
+      console.log("measuring for: ", index)
+      console.log(itemHeights)
+      triggerRecalculation(index)
     }
   };
 
   useEffect(() => {
+    setItemHeights(new Array(conversation.length))
     // Measure heights after the first render
     conversation.forEach((_, index) => {
       measureHeight(index);
     });
-    console.log(itemHeights)
   }, [conversation]);
 
   const getItemSize = (index: number): number => {
     return itemHeights[index] || 100; // Fallback height if not measured yet
+  };
+
+  // Example function to trigger resetAfterIndex
+  const triggerRecalculation = (index: number) => {
+    console.log("triggering recalc")
+    if (listRef.current) {
+      // Recalculate sizes starting from this index
+      listRef.current.resetAfterIndex(index, true);
+    }
   };
 
    // Row component that renders each conversation message
@@ -60,6 +74,7 @@ export const TextContainer = ({ conversation }: TextContainerProps) => {
       <AutoSizer>
           {({ height, width }) => (
             <List
+            ref={listRef}
             height={height}               // Height of the scrollable container
             itemCount={conversation.length} // Number of messages
             itemSize={getItemSize}         // Function that returns the height of each item
