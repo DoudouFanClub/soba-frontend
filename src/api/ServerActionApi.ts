@@ -66,7 +66,7 @@ export const LoadChatRequest = async (username: string, title: string, prevTitle
 
   try {
     const response = await axios.post(
-      "http://192.168.0.1:8080/load_chat",
+      "http://192.168.0.100:8080/load_chat",
       {
         username: username,
         title: title,
@@ -158,7 +158,7 @@ export const HandleSendMessage = (username: string, title: string, msg: string, 
 
       msges.push(apiMessage);
 
-      const response = await fetch("http://192.168.0.1:8080/send_message", {
+      const response = await fetch("http://192.168.0.100:8080/send_message", {
         method: "POST",
         body: JSON.stringify(JsonBodyToSend), // change this to pack as a different json method
         headers: {
@@ -172,7 +172,7 @@ export const HandleSendMessage = (username: string, title: string, msg: string, 
       }
 
       for await (const chunk of decodeStreamToJson(response.body)) {
-        //console.log("Chunk: ", chunk);
+        console.log("Chunk: ", chunk);
 
         setMsgCallback((msges) => {
           const lastMessageContents = msges[msges.length - 1];
@@ -204,7 +204,7 @@ export const RetrieveConversationTitlesRequest = async (username: string): Promi
 
   try {
     const response = await axios.post(
-      "http://192.168.0.1:8080/retrieve_convo_titles",
+      "http://192.168.0.100:8080/retrieve_convo_titles",
       {
         username: username,
         titles: [],

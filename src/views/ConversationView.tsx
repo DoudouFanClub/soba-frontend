@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { marked, Tokens } from "marked";
 import hljs from "highlight.js";
@@ -72,7 +72,8 @@ export const ConversationView = () => {
   // State variables
   const [title, setTitle] = useState("");
   const [model, setModel] = useState("");
-  const [prompt, setPrompt] = useState("");
+  const [prompt, _] = useState("");
+  const promptRef = useRef(prompt);
   const [textAreaLock, setTextAreaLock] = useState(false);
   const [titles, setTitles] = useState<string[]>();
   const [messages, setMessages] = useState<ApiMessage[]>([]);
@@ -133,7 +134,7 @@ export const ConversationView = () => {
     // handleAutoScrollToBottom
 
     //messages.push();
-    await HandleSendMessage(username, title, prompt, messages, setMessages)();
+    await HandleSendMessage(username, title, promptRef.current, messages, setMessages)();
     setTextAreaLock(false);
   };
 
@@ -159,6 +160,7 @@ export const ConversationView = () => {
         const response: ApiResponse = await DeleteChatRequest(username, commandTitle);
         if (response.response == "success") {
           HandleDeleteConversation();
+          setMessages([]);
         } else {
           console.log("Backend says not ok...");
         }
@@ -214,7 +216,7 @@ export const ConversationView = () => {
           {!visible && title != "" && (
             <TextArea
               cssProps="conversationTextBox"
-              onChange={(value) => setPrompt(value)}
+              onChange={(value) => promptRef.current = value }
               placeholder="Ask anything..."
               onEnterDown={onUserEnterInTextArea}
               isLocked={textAreaLock}

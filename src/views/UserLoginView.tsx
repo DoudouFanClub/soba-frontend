@@ -54,7 +54,7 @@ export const UserLoginView = ({ setDisableView }: UsernameCallbackProps) => {
           <h1 className="loginHeaderTitle">Login</h1>
 
           {/* Input fields for username and password */}
-          <TextBox type="text" placeholder="Username" cssProps="usernameTextBoxStyle" onChange={(value) => setUsername(value)} />
+          <TextBox type="text" placeholder="Username" cssProps="usernameTextBoxStyle" onChange={setUsername} />
           <TextBox type="password" placeholder="Password" cssProps="passwordTextBoxStyle" onChange={(value) => setPassword(value)} />
 
           {/* Login button */}

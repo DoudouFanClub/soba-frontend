@@ -5,6 +5,7 @@ import { VariableSizeList as List } from 'react-window';
 import AutoSizer from 'react-virtualized-auto-sizer';
 
 
+
 import "./TextContainer.css";
 
 // Component Props
@@ -13,6 +14,7 @@ interface TextContainerProps {
   conversation: ApiMessage[];
 }
 
+  
 // Text Container Component - Renders Text Blocks on
 // the Left or Right within a Div
 export const TextContainer = ({ conversation }: TextContainerProps) => {

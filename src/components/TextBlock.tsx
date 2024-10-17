@@ -17,9 +17,8 @@ interface TextBlockProps {
 
 // TextBlock Component - Displayed within ConversationView
 // Supports Markdown Format & Highlighting of Languages
-export const TextBlock = ({ text, side }: TextBlockProps) => {
-  useEffect(() => {}, [text]);
-
+export const TextBlock = ({ text, side }: TextBlockProps) => { // use react memo here to cache the prior messages
+  
   return (
     <div className={"textBlock " + side}>
       {/*
