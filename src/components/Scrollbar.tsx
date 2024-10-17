@@ -48,13 +48,6 @@ export const Scrollbar = ({ placeholder, username, activeTitle, values, disabled
                 cssProps={`${titleName}` === `${activeTitle}` ? "conversationTopicButtonsClicked" : "conversationTopicButtons"}
                 disabled={disabled}
               />
-              <MenuButton
-                key={titleName + index}
-                CssProp={`${titleName}` === `${activeTitle}` ? "menuButtonStyleClicked" : "menuButtonStyle"}
-                ButtonList={["Delete Chat", "Rename Chat"]}
-                OnButtonClick={OnHamburgerButtonClick}
-                Title={titleName}
-              />
             </div>
           ))
         ) : (

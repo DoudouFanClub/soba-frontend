@@ -1,5 +1,7 @@
+import { memo, useEffect } from "react";
 import { ApiMessage } from "../api/ServerActionApi";
 import { TextBlock } from "./TextBlock";
+
 
 import "./TextContainer.css";
 
@@ -9,9 +11,12 @@ interface TextContainerProps {
   conversation: ApiMessage[];
 }
 
+  
 // Text Container Component - Renders Text Blocks on
 // the Left or Right within a Div
 export const TextContainer = ({ conversation }: TextContainerProps) => {
+
+  
   return (
     <div className="textContainer">
       {/*
